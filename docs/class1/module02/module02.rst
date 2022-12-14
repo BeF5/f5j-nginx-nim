@@ -741,6 +741,29 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                   APP VERSION
   nim     default         1               2022-12-13 15:32:57.809164688 +0000 UTC deployed        nms-hybrid-2.6.0        2.6.0
 
+.. code-block:: cmdin
+
+  kubectl get pv,sc
+  NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
+  persistentvolume/pv01   1Gi        RWO            Delete           Bound    default/clickhouse            local-storage            60s
+  persistentvolume/pv02   1Gi        RWO            Delete           Bound    default/core-dqlite           local-storage            54s
+  persistentvolume/pv03   1Gi        RWO            Delete           Bound    default/dpm-dqlite            local-storage            51s
+  persistentvolume/pv04   1Gi        RWO            Delete           Bound    default/dpm-nats-streaming    local-storage            48s
+  persistentvolume/pv05   1Gi        RWO            Delete           Bound    default/integrations-dqlite   local-storage            47s
+  persistentvolume/pv06   1Gi        RWO            Delete           Bound    default/core-secrets          local-storage            45s
+  
+  NAME                                        PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+  storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  169m
+  
+  kubectl get pod
+  NAME                           READY   STATUS    RESTARTS   AGE
+  apigw-749449768c-hnl2l         1/1     Running   0          30s
+  clickhouse-86f5dd868b-ptdh5    1/1     Running   0          31s
+  core-6d4c9b8ddb-r9xp2          1/1     Running   0          31s
+  dpm-6ffb9c9ff-c7cmx            1/1     Running   0          31s
+  ingestion-696445c77d-br9wr     1/1     Running   0          31s
+  integrations-db4c7c66c-gtwhd   1/1     Running   0          31s
+
 外部から接続のためNICのセットアップ
 ~~~
 
@@ -748,8 +771,34 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
 
   cd ~/f5j-nginx-observability-lab/prep/nic
   cp monitor-jaeger-vs.yaml nms-apigw-vs.yaml
-  # for access observability tools
+
+  vi nms-apigw-vs.yaml
   kubectl apply -f nms-apigw-vs.yaml
+
+
+NIM への接続
+~~~~
+
+踏み台ホストにてChromeを開き、 `http://nms.example.com:8080/ui <http://nms.example.com:8080/ui>`__ に接続してください
+ログイン情報は以下です。
+
++--------+---------------+---------------------+
+|username|admin          |                     |
++--------+---------------+---------------------+
+|password|NIMPassword1234|HELMで指定した文字列 |
++--------+---------------+---------------------+
+
+以下の様にTop画面が表示されます
+
+   .. image:: ./media/nim-login.png
+      :width: 400
+
+``Sign In`` をクリックすると Basic認証によるポップアップが表示されます。Username ``admin`` 、 Password は ``Install時の出力で予め確認した文字列`` を入力してください
+ログインが完了すると以下のような画面が表示されます
+
+   .. image:: ./media/nim-top.png
+      :width: 400
+
 
 3. Docker ImageのBuild / 実行
 ----
@@ -758,7 +807,9 @@ MyF5よりNIMのパッケージファイルを取得
 
 必要なファイルの取得
 
-git clone https://github.com/fabriziofiorucci/NGINX-NMS-Docker
+.. code-block:: cmdin
+
+  git clone https://github.com/fabriziofiorucci/NGINX-NMS-Docker
 
 
 2. ライセンスの投入

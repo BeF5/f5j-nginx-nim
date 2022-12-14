@@ -335,8 +335,6 @@ NMSが起動していることを確認します
 
   ps aufx | grep nms
 
-
-
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
@@ -397,9 +395,6 @@ NIM への接続
 
    .. image:: ./media/nim-top.png
       :width: 400
-
-
-
 
 (Option) NIM の Version確認
 ~~~~
@@ -645,9 +640,8 @@ NodePortの情報を確認します。
 HELMによるNMSのinstall
 ~~~~
 
-F5 Supportサイト `MyF5 <https://my.f5.com/>`__ にログインし、HELMに利用するパッケージをダウンロードします
-
-各プルダウンより以下の内容を選択します
+F5 Supportサイト `MyF5 <https://my.f5.com/>`__ にログインし、HELMに利用するパッケージをダウンロードすることでインストールが可能となります。
+ダウンロードの際には各プルダウンより以下の内容を選択します
 
 +--------------------+-------------------------+
 |Group               |NGINX                    |
@@ -662,6 +656,9 @@ F5 Supportサイト `MyF5 <https://my.f5.com/>`__ にログインし、HELMに�
 +--------------------+-------------------------+
 |Architecture        |k8                       |
 +--------------------+-------------------------+
+
+   .. image:: ./media/myf5-nsm-helm-download.png
+      :width: 400
 
 HELM Installに利用するDocker Imagesファイルが表示されます。ダウンロードし、Installを行う環境へ送付します
 取得するファイルは以下のような名称となります。
@@ -764,15 +761,32 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   ingestion-696445c77d-br9wr     1/1     Running   0          31s
   integrations-db4c7c66c-gtwhd   1/1     Running   0          31s
 
-外部から接続のためNICのセットアップ
+外部から接続するためNICのセットアップ
 ~~~
 
 .. code-block:: cmdin
 
   cd ~/f5j-nginx-observability-lab/prep/nic
-  cp monitor-jaeger-vs.yaml nms-apigw-vs.yaml
+  cat nms-apigw-vs.yaml
 
-  vi nms-apigw-vs.yaml
+  apiVersion: k8s.nginx.org/v1
+  kind: VirtualServer
+  metadata:
+    name: nms-vs
+  spec:
+    ingressClassName: nginx2
+    host: nms.example.com
+    upstreams:
+    - name: nms
+      service: apigw
+      port: 443
+      tls:
+        enable: true
+    routes:
+    - path: /
+      action:
+        pass: nms
+
   kubectl apply -f nms-apigw-vs.yaml
 
 
@@ -820,7 +834,7 @@ MyF5よりNIMのパッケージファイルを取得
 
 ``Settings`` をクリックします
 
-   .. image:: ./media/nim-top.png
+   .. image:: ./media/nim-license.png
       :width: 400
 
 ``Upload License`` をクリックし、ライセンスファイルを選択します
@@ -828,17 +842,20 @@ MyF5よりNIMのパッケージファイルを取得
 3. NGINX Agent のインストール
 ====
 
-1. NIMより取得したNGINX AgentをLinuxへのInstallする
+1. NIMより取得したNGINX AgentをLinuxへInstall
 ----
 
-NGINX Agent のinstall
+画面に表示された内容を参考に、NGINX Agent をInstallします
+
+   .. image:: ./media/nim-instances.png
+      :width: 400
 
 .. code-block:: cmdin
 
   curl -k https://10.1.1.5/install/nginx-agent | sudo sh
 
 
-NGINX Agentの起動
+NGINX Agentを起動します
 
 .. code-block:: cmdin
 
@@ -869,3 +886,5 @@ NGINX Agentの起動
 
 NIMの ``Instances`` を再度開くと、追加したインスタンスが表示されます
 
+   .. image:: ./media/nim-instances2.png
+      :width: 400

@@ -762,7 +762,7 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   integrations-db4c7c66c-gtwhd   1/1     Running   0          31s
 
 外部から接続するためNICのセットアップ
-~~~
+~~~~
 
 .. code-block:: cmdin
 

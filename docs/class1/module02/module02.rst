@@ -817,6 +817,9 @@ NIM への接続
 3. Docker ImageのBuild / 実行
 ----
 
+Docker ImageのBuild
+~~~~
+
 必要なファイルを取得します。
 
 .. code-block:: cmdin
@@ -832,6 +835,9 @@ NIM への接続
   cp ~/nginx-repo* .
   sudo ./scripts/buildNIM.sh -C nginx-repo.crt -K nginx-repo.key -i -t nim
   
+
+Docker Composeによるコンテナの起動
+~~~~
 
 docker-compose でコンテナを実行します  
 

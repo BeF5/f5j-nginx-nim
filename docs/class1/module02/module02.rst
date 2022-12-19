@@ -817,13 +817,87 @@ NIM への接続
 3. Docker ImageのBuild / 実行
 ----
 
-MyF5よりNIMのパッケージファイルを取得
-
-必要なファイルの取得
+必要なファイルを取得します。
 
 .. code-block:: cmdin
 
-  git clone https://github.com/fabriziofiorucci/NGINX-NMS-Docker
+  cd ~/
+  git clone https://github.com/BeF5/f5j-nms-docker-simple.git
+  
+以下コマンドを実行し、Docker Imageを作成します
+
+.. code-block:: cmdin
+
+  cd ~/f5j-nms-docker-simple
+  cp ~/nginx-repo* .
+  sudo ./scripts/buildNIM.sh -C nginx-repo.crt -K nginx-repo.key -i -t nim
+  
+  
+.. code-block:: cmdin
+
+  ## cd ~/f5j-nms-docker-simple
+  sudo docker-compose -f docker-compose.yaml up -d
+
+NIMが正しく動作した場合のサンプルのステータスを示します  
+動作するDockerイメージの状態。clickhouseと前の手順でBuildしたnimのイメージが動作します
+
+.. code-block:: cmdin
+
+  sudo docker ps
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  CONTAINER ID   IMAGE                                    COMMAND                  CREATED          STATUS          PORTS                                                                                            NAMES
+  90479d97b943   clickhouse/clickhouse-server:21.12.4.1   "/entrypoint.sh"         17 minutes ago   Up 17 minutes   0.0.0.0:8123->8123/tcp, :::8123->8123/tcp, 0.0.0.0:9000->9000/tcp, :::9000->9000/tcp, 9009/tcp   f5j-nms-docker-simple_clickhouse_1
+  cbe21f598fb7   nim:latest                               "/bin/sh -c /deploym…"   17 minutes ago   Up 17 minutes   0.0.0.0:443->443/tcp, :::443->443/tcp, 0.0.0.0:5000->5000/tcp, :::5000->5000/tcp                 f5j-nms-docker-simple_nginx-nim2_1
+
+正しく動作した場合、NIMのコンテナで以下のログが確認できます
+
+.. code-block:: cmdin
+
+  sudo docker logs $(sudo docker ps -a -f name=nim -q)
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  Waiting for ClickHouse...
+  Waiting for ClickHouse...
+  Using openssl version 3.0.2 to update NGINX password for admin in file: /etc/nms/nginx/.htpasswd
+   * Starting nginx nginx
+     ...done.
+  [91] [INF] Starting nats-server
+  [91] [INF]   Version:  2.9.1
+  [91] [INF]   Git:      [not set]
+  [91] [INF]   Name:     NAKHTJIAR5EXUKXQO4ASOM427BVOPXY34UR2FE5L2O5255IA55NQTT4J
+  [91] [INF]   ID:       NAKHTJIAR5EXUKXQO4ASOM427BVOPXY34UR2FE5L2O5255IA55NQTT4J
+  [91] [INF] Listening for client connections on 127.0.0.1:4222
+  [91] [INF] Server is ready
+  [80] [INF] Starting nats-server
+  [80] [INF]   Version:  2.9.1
+  [80] [INF]   Git:      [not set]
+  [80] [INF]   Name:     NDRB6PWV4DYBD4AUAKYRZJX4JWT6YX4SCZAR5VP44ONPIFFCISGRLEE4
+  [80] [INF]   Node:     5e1qS4jS
+  [80] [INF]   ID:       NDRB6PWV4DYBD4AUAKYRZJX4JWT6YX4SCZAR5VP44ONPIFFCISGRLEE4
+  [80] [INF] Starting JetStream
+  [80] [INF]     _ ___ _____ ___ _____ ___ ___   _   __  __
+  [80] [INF]  _ | | __|_   _/ __|_   _| _ \ __| /_\ |  \/  |
+  [80] [INF] | || | _|  | | \__ \ | | |   / _| / _ \| |\/| |
+  [80] [INF]  \__/|___| |_| |___/ |_| |_|_\___/_/ \_\_|  |_|
+  [80] [INF]
+  [80] [INF]          https://docs.nats.io/jetstream
+  [80] [INF]
+  [80] [INF] ---------------- JETSTREAM ----------------
+  [80] [INF]   Max Memory:      1.00 GB
+  [80] [INF]   Max Storage:     10.00 GB
+  [80] [INF]   Store Directory: "/var/lib/nms/streaming/jetstream"
+  [80] [INF] -------------------------------------------
+  [80] [INF] Listening for client connections on 127.0.0.1:9100
+  [80] [INF] Server is ready
+  ⇨ http server started on /var/run/nms/core.sock
+  ⇨ http server started on /var/run/nms/dpm.sock
 
 
 2. ライセンスの投入

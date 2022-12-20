@@ -20,7 +20,8 @@ NIMログインし、Modules欄に表示された ``Instance Manager`` をクリ
 
 左メニューの ``Scan`` をクリックします。
 
-画面上部のメニューを以下の内容を入力し ``Scan`` をクリックします
+
+画面上部のメニューを以下の内容を入力し 右側に表示される ``Scan`` ボタンをクリックします
 
 +-----------+------------+
 |CIDR       |10.1.1.0/24 |
@@ -41,6 +42,8 @@ NIMログインし、Modules欄に表示された ``Instance Manager`` をクリ
 
    .. image:: ./media/nim-scan-instance-cve.png
       :width: 400
+
+``Certificate`` の欄が ``1 (0以外)`` のインスタンスをクリックします
 
    .. image:: ./media/nim-scan-instance-cert.png
       :width: 400

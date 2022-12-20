@@ -28,6 +28,11 @@ NGINX Agentを起動します
   sudo systemctl start nginx-agent
   
   sudo systemctl status nginx-agent
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
   ● nginx-agent.service - NGINX Agent
        Loaded: loaded (/etc/systemd/system/nginx-agent.service; enabled; vendor preset: enabled)
        Active: active (running) since Tue 2022-12-13 13:59:39 UTC; 24s ago
@@ -52,4 +57,39 @@ NGINX Agentを起動します
 NIMの ``Instances`` を再度開くと、追加したインスタンスが表示されます
 
    .. image:: ./media/nim-instances2.png
+      :width: 400
+
+
+2. NGINXのステータス画面
+====
+
+AgentをインストールしたNGINXは各種ステータスの閲覧が可能となります
+
+一覧に表示される、AgentをインストールしたNGINXインスタンスをクリックしてください
+
+- Details
+
+   .. image:: ./media/nim-monitor.png
+      :width: 400
+
+- Metrics Summary
+
+   .. image:: ./media/nim-monitor2.png
+      :width: 400
+
+- Metrics : Histrical Data & Graph
+
+   .. image:: ./media/nim-monitor3.png
+      :width: 400
+
+3. NGINXの設定管理画面
+====
+
+AgentをインストールしたNGINXは設定をNIM経由で変更・管理することが可能となります
+
+一覧に表示される、AgentをインストールしたNGINXインスタンスをクリックしてください
+
+- Metrics : Histrical Data & Graph
+
+   .. image:: ./media/nim-setting.png
       :width: 400

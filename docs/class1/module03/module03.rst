@@ -89,7 +89,7 @@ AgentをインストールしたNGINXは設定をNIM経由で変更・管理す�
 
 一覧に表示される、AgentをインストールしたNGINXインスタンスをクリックしてください
 
-- Metrics : Histrical Data & Graph
+- Config
 
    .. image:: ./media/nim-setting.png
       :width: 400

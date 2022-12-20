@@ -87,9 +87,17 @@ AgentをインストールしたNGINXは各種ステータスの閲覧が可能�
 
 AgentをインストールしたNGINXは設定をNIM経由で変更・管理することが可能となります
 
-一覧に表示される、AgentをインストールしたNGINXインスタンスをクリックしてください
+一覧に表示の対象インスタンス右側に表示される ``…`` をクリックし ``Edit Config`` を開く、
+または、対象のNGINXインスタンスをクリックし画面右側の ``Edit Config`` をクリックし、
+インスタンスのNGINX設定ファイルを開きます
 
 - Config
 
+   .. image:: ./media/nim-editconfig.png
+      :width: 400
+
    .. image:: ./media/nim-setting.png
       :width: 400
+
+
+ファイルの新規作成、削除、そして設定内容を修正し反映することが可能です

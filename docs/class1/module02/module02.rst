@@ -528,6 +528,7 @@ Vault の Version を確認します
   sudo apt-get update
   sudo apt-get install helm
 
+HELMのVersionを確認します
 
 .. code-block:: cmdin
 

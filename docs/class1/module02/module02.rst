@@ -68,7 +68,6 @@ Click Houseのサービスを起動し、状態を確認します
   :linenos:
   :caption: 実行結果サンプル
 
-  ubuntu@ip-10-1-1-5:~$ sudo service clickhouse-server status
   ● clickhouse-server.service - ClickHouse Server (analytic DBMS for big data)
        Loaded: loaded (/lib/systemd/system/clickhouse-server.service; enabled; vendor preset: enabled)
        Active: active (running) since Tue 2022-12-13 09:37:45 UTC; 3s ago
@@ -107,7 +106,7 @@ Click House Clientを実行し、接続できることを確認します
   Warnings:
    * Maximum number of threads is lower than 30000. There could be problems with handling a lot of simultaneous queries.
   
-  ip-10-1-1-5.us-west-2.compute.internal :) q << "q" を入力し、クライアントを終了してください
+  ip-10-1-1-5.xxx.internal :) q << "q" を入力し、クライアントを終了してください
   Bye.
 
 - 1行目にClient Version、4行目にClick HouseのVersionが表示されていることがわかります
@@ -116,7 +115,7 @@ Click House Clientを実行し、接続できることを確認します
 NGINX Management Suiteのinstall
 ~~~~
 
-証明書・鍵をコピーします
+インストールに利用する証明書・鍵をコピーします
 
 .. code-block:: cmdin
 
@@ -442,10 +441,13 @@ NIM への接続
 ~~~~
 
 NGINX Management Suite は Secret のストアとしてVaultを利用することが可能です。
-
 Install手順はVaultのマニュアルを参照しています
 
 - `Install Vault <https://developer.hashicorp.com/vault/tutorials/getting-started/getting-started-install>`__
+
+本手順は参考のInstall手順のみを示しております。利用方法は以下を参照してください。
+
+- `Configure Vault for Storing Secrets <https://docs.nginx.com/nginx-management-suite/admin-guides/getting-started/configure-vault/>`__
 
 .. NOTE::
 
@@ -478,12 +480,6 @@ Click Houseのサービスを起動し、状態を確認します
   :linenos:
   :caption: 実行結果サンプル
 
-  ● vault.service - "HashiCorp Vault - A tool for managing secrets"
-       Loaded: loaded (/lib/systemd/system/vault.service; disabled; vendor preset: enabled)
-       Active: inactive (dead)
-         Docs: https://www.vaultproject.io/docs/
-  ubuntu@ip-10-1-1-5:~$ sudo service vault start
-  ubuntu@ip-10-1-1-5:~$ sudo service vault status
   ● vault.service - "HashiCorp Vault - A tool for managing secrets"
        Loaded: loaded (/lib/systemd/system/vault.service; disabled; vendor preset: enabled)
        Active: active (running) since Tue 2022-12-13 09:53:30 UTC; 3s ago
@@ -640,6 +636,11 @@ NodePortの情報を確認します。
 HELMによるNMSのinstall
 ~~~~
 
+.. NOTE::
+
+  こちらの手順は NMS v2.6.0 のInstall手順となります
+
+
 F5 Supportサイト `MyF5 <https://my.f5.com/>`__ にログインし、HELMに利用するパッケージをダウンロードすることでインストールが可能となります。
 ダウンロードの際には各プルダウンより以下の内容を選択します
 
@@ -667,46 +668,56 @@ HELM Installに利用するDocker Imagesファイルが表示されます。ダ�
 
   nms-helm-2.6.0.tar.gz
 
-表示されたファイルをKubernetesへのデプロイを行うホストへ転送します
+ダウンロードしたファイルをKubernetesへのデプロイを行うホストへ転送します
 
 .. code-block:: cmdin
 
+  cd ~/
   mkdir nim-install
   tar -xf nms-helm-2.6.0.tar.gz -C ./nim-install
   # gzip で圧縮されていない模様
 
+展開した各Docker Imageをloadします
+
 .. code-block:: cmdin
 
-  cd nim-install/
+  cd ~/nim-install/
   ls | awk '{ print  "docker load -i "$1 }' | sh
-  
+
+結果を確認します
+
+.. code-block:: cmdin
+
   docker images | grep nginx
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
   nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/apigw          latest    585fd202532e   3 weeks ago     148MB
   nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/integrations   latest    5e4f407f4e1f   3 weeks ago     109MB
   nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/ingestion      latest    9c346bac76b4   3 weeks ago     115MB
   nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/dpm            latest    cb116746f789   3 weeks ago     125MB
   nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/core           latest    e6084032b6ee   3 weeks ago     117MB
 
-タグを変更します
+Docker Imageのタグを変更します
 
 .. code-block:: cmdin
 
   # 予め nms を registry.example.com に作成する
   docker images | grep nginx | awk '{ print $1 }' |  awk -F"2-6-0" '{ print "docker tag "$1"2-6-0"$2" registry.example.com/root/nim"$2":2.6.0"  }' |sh
 
-
-取得したコンテナイメージをRegistryにPushします
+コンテナイメージをRegistryにPushします
 
 .. code-block:: cmdin
 
   docker images | grep nginx | awk '{ print $1 }' |  awk -F"2-6-0" '{ print "docker push registry.example.com/root/nim"$2":2.6.0"  }' | sh
 
-
 HELMチャートを展開します
 
 .. code-block:: cmdin
 
-  ## cd nim-install/
+  ## cd ~/nim-install/
   tar -xf nms-hybrid-2.6.0.tgz
 
 HELMを利用しデプロイします。この例ではオプションパラメータを指定し、参照する各Imageを指定します
@@ -738,9 +749,16 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                   APP VERSION
   nim     default         1               2022-12-13 15:32:57.809164688 +0000 UTC deployed        nms-hybrid-2.6.0        2.6.0
 
+Persistent Volumeの状態を確認します。デプロイする各Podに割り当てられていることが確認できます
+
 .. code-block:: cmdin
 
   kubectl get pv,sc
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
   NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
   persistentvolume/pv01   1Gi        RWO            Delete           Bound    default/clickhouse            local-storage            60s
   persistentvolume/pv02   1Gi        RWO            Delete           Bound    default/core-dqlite           local-storage            54s
@@ -751,8 +769,17 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   
   NAME                                        PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
   storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  169m
-  
+
+各PodがRunningであることを確認します
+
+.. code-block:: cmdin
+
   kubectl get pod
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
   NAME                           READY   STATUS    RESTARTS   AGE
   apigw-749449768c-hnl2l         1/1     Running   0          30s
   clickhouse-86f5dd868b-ptdh5    1/1     Running   0          31s

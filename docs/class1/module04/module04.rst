@@ -1,7 +1,7 @@
 NGINX Instance Managerの利用
 ####
 
-1. Scan 
+1. NGINX Scan 
 ====
 
 Scan機能は、NIMから対象のネットワークに対し、NGINXやその他Webサーバを検知する機能です。
@@ -43,10 +43,54 @@ NIMログインし、Modules欄に表示された ``Instance Manager`` をクリ
    .. image:: ./media/nim-scan-instance-cve.png
       :width: 400
 
+該当するCVEの情報が表示されることが確認できます
+
+
 ``Certificate`` の欄が ``1 (0以外)`` のインスタンスをクリックします
 
    .. image:: ./media/nim-scan-instance-cert.png
       :width: 400
 
-2. Config Manage
+証明書の情報が表示されます
+
+2. NGINXのステータス画面
 ====
+
+AgentをインストールしたNGINXは各種ステータスの閲覧が可能となります
+
+一覧に表示される、AgentをインストールしたNGINXインスタンスをクリックしてください
+
+- Details
+
+   .. image:: ./media/nim-monitor.png
+      :width: 400
+
+- Metrics Summary
+
+   .. image:: ./media/nim-monitor2.png
+      :width: 400
+
+- Metrics : Histrical Data & Graph
+
+   .. image:: ./media/nim-monitor3.png
+      :width: 400
+
+3. NGINXの設定管理画面
+====
+
+AgentをインストールしたNGINXは設定をNIM経由で変更・管理することが可能となります
+
+一覧に表示の対象インスタンス右側に表示される ``…`` をクリックし ``Edit Config`` を開く、
+または、対象のNGINXインスタンスをクリックし画面右側の ``Edit Config`` をクリックし、
+インスタンスのNGINX設定ファイルを開きます
+
+- Config
+
+   .. image:: ./media/nim-editconfig.png
+      :width: 400
+
+   .. image:: ./media/nim-setting.png
+      :width: 400
+
+
+ファイルの新規作成、削除、そして設定内容を修正し反映することが可能です

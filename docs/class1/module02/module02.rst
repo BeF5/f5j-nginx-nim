@@ -534,17 +534,15 @@ HELMのVersionを確認します
 
   helm version
 
-
 `3. NICのセットアップ <https://f5j-nginx-k8s-observability.readthedocs.io/en/latest/class1/module02/module02.html#nic>`__ より手順を抜粋し、対象ホストにHELMをインストールします
-
+(こちらの手順では、NSMとの連携を実施していない、 ``nic2`` を利用します)
 
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/BeF5/f5j-nsm-lab.git
+  git clone https://github.com/BeF5/f5j-nginx-nim-lab
   git clone https://github.com/BeF5/f5j-nginx-observability-lab.git --branch v1.1.0
   git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.4.1
-  cd ~/kubernetes-ingress/
   
   cd ~/kubernetes-ingress/
   cp ~/nginx-repo* .
@@ -556,6 +554,11 @@ HELMのVersionを確認します
   docker push registry.example.com/root/nic/nginxplus-ingress-nap-dos:2.4.1
 
 .. code-block:: cmdin
+
+  cd ~/kubernetes-ingress/deployments/helm-chart-dos-arbitrator
+  helm upgrade --install appdos-arbitrator . \
+   --namespace nginx-ingress \
+   --create-namespace
 
   cd ~/kubernetes-ingress/deployments/helm-chart
   cp ~/f5j-nginx-observability-lab/prep/helm/nic2-addvalue.yaml .
@@ -588,12 +591,11 @@ NodePortの情報を確認します。
 
   nic2-nginx-ingress       NodePort    10.110.91.42   <none>        80:31253/TCP,443:31851/TCP   43s
 
-
 表示されているポート番号を確認してください。これらの情報を元に、NGINXの設定を作成します。
 
 .. code-block:: cmdin
 
-  vi ~/f5j-nsm-lab/prep/nginx.conf
+  vi ~/f5j-nginx-nim-lab/prep/nginx.conf
 
 .. code-block:: bash
   :linenos:
@@ -631,8 +633,34 @@ NodePortの情報を確認します。
 .. code-block:: cmdin
 
   sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf-
-  sudo cp ~/f5j-nsm-lab/prep/nginx.conf /etc/nginx/nginx.conf
+  sudo cp ~/f5j-nginx-nim-lab/prep/nginx.conf /etc/nginx/nginx.conf
   sudo nginx -s reload
+
+Storage Class, Persistent Volume を作成します。こちらの内容は環境に合わせて適宜変更ください
+
+.. code-block:: cmdin
+
+  cd ~/f5j-nginx-nim-lab/prep
+  kubectl apply -f local-sc.yaml
+  kubectl apply -f local-pv-10-1-1-9.yaml
+
+  kubectl get sc,pv
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  NAME                                        PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+  storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  24s
+  
+  NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS    REASON   AGE
+  persistentvolume/pv01   1Gi        RWO            Delete           Available           local-storage            12s
+  persistentvolume/pv02   1Gi        RWO            Delete           Available           local-storage            12s
+  persistentvolume/pv03   1Gi        RWO            Delete           Available           local-storage            12s
+  persistentvolume/pv04   1Gi        RWO            Delete           Available           local-storage            12s
+  persistentvolume/pv05   1Gi        RWO            Delete           Available           local-storage            12s
+  persistentvolume/pv06   1Gi        RWO            Delete           Available           local-storage            12s
+
 
 HELMによるNMSのinstall
 ~~~~
@@ -643,7 +671,8 @@ HELMによるNMSのinstall
 
 
 F5 Supportサイト `MyF5 <https://my.f5.com/>`__ にログインし、HELMに利用するパッケージをダウンロードすることでインストールが可能となります。
-ダウンロードの際には各プルダウンより以下の内容を選択します
+
+画面上部 ``RESOURCES`` > ``Downloads`` を開き、各プルダウンに以下の内容を選択しダウンロードします
 
 +--------------------+-------------------------+
 |Group               |NGINX                    |
@@ -683,13 +712,13 @@ HELM Installに利用するDocker Imagesファイルが表示されます。ダ�
 .. code-block:: cmdin
 
   cd ~/nim-install/
-  ls | awk '{ print  "docker load -i "$1 }' | sh
+  ls | grep -v hybrid | awk '{ print  "docker load -i "$1 }' | sh
 
 結果を確認します
 
 .. code-block:: cmdin
 
-  docker images | grep nginx
+  docker images | grep nginxdevops
 
 .. code-block:: bash
   :linenos:
@@ -706,20 +735,28 @@ Docker Imageのタグを変更します
 .. code-block:: cmdin
 
   # 予め nms を registry.example.com に作成する
-  docker images | grep nginx | awk '{ print $1 }' |  awk -F"2-6-0" '{ print "docker tag "$1"2-6-0"$2" registry.example.com/root/nim"$2":2.6.0"  }' |sh
+  docker images | grep nginxdevops | awk '{ print $1 }' |  awk -F"2-6-0" '{ print "docker tag "$1"2-6-0"$2" registry.example.com/root/nms"$2":2.6.0"  }' |sh
 
 コンテナイメージをRegistryにPushします
 
 .. code-block:: cmdin
 
-  docker images | grep nginx | awk '{ print $1 }' |  awk -F"2-6-0" '{ print "docker push registry.example.com/root/nim"$2":2.6.0"  }' | sh
+  docker images | grep nms | awk '{ print "docker push "$1":"$2}' | sh
 
-HELMチャートを展開します
+以下手順でNGINXが提供するHELMチャートの展開が可能です。
 
 .. code-block:: cmdin
 
   ## cd ~/nim-install/
   tar -xf nms-hybrid-2.6.0.tgz
+
+ラボ環境では予め作成したHELMチャートを利用します。
+
+.. code-block:: cmdin
+
+  ## cd ~/nim-install/
+  mv nms-hybrid/values.yaml nms-hybrid/values.yaml-
+  cp ~/f5j-nginx-nim-lab/prep/nms-values.yaml nms-hybrid/values.yaml
 
 HELMを利用しデプロイします。この例ではオプションパラメータを指定し、参照する各Imageを指定します
 
@@ -728,15 +765,15 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   ## cd ~/nim-install/
   helm upgrade --install \
   --set adminPasswordHash=$(openssl passwd -1 "NIMPassword1234") \
-  --set apigw.image.repository=registry.example.com/root/nim/apigw \
+  --set apigw.image.repository=registry.example.com/root/nms/apigw \
   --set apigw.image.tag=2.6.0 \
-  --set core.image.repository=registry.example.com/root/nim/core \
+  --set core.image.repository=registry.example.com/root/nms/core \
   --set core.image.tag=2.6.0 \
-  --set dpm.image.repository=registry.example.com/root/nim/dpm \
+  --set dpm.image.repository=registry.example.com/root/nms/dpm \
   --set dpm.image.tag=2.6.0 \
-  --set ingestion.image.repository=registry.example.com/root/nim/ingestion \
+  --set ingestion.image.repository=registry.example.com/root/nms/ingestion \
   --set ingestion.image.tag=2.6.0 \
-  --set integrations.image.repository=registry.example.com/root/nim/integrations \
+  --set integrations.image.repository=registry.example.com/root/nms/integrations \
   --set integrations.image.tag=2.6.0 \
   --set persistence.enable=false \
   nim ./nms-hybrid
@@ -747,6 +784,11 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
 .. code-block:: cmdin
 
   helm list
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
   NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                   APP VERSION
   nim     default         1               2022-12-13 15:32:57.809164688 +0000 UTC deployed        nms-hybrid-2.6.0        2.6.0
 
@@ -754,11 +796,14 @@ Persistent Volumeの状態を確認します。デプロイする各Podに割り
 
 .. code-block:: cmdin
 
-  kubectl get pv,sc
+  kubectl get sc,pv
 
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
+
+  NAME                                        PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+  storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  169m
 
   NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
   persistentvolume/pv01   1Gi        RWO            Delete           Bound    default/clickhouse            local-storage            60s
@@ -768,9 +813,6 @@ Persistent Volumeの状態を確認します。デプロイする各Podに割り
   persistentvolume/pv05   1Gi        RWO            Delete           Bound    default/integrations-dqlite   local-storage            47s
   persistentvolume/pv06   1Gi        RWO            Delete           Bound    default/core-secrets          local-storage            45s
   
-  NAME                                        PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-  storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  169m
-
 各PodがRunningであることを確認します
 
 .. code-block:: cmdin

@@ -401,7 +401,7 @@ NIM への接続
 以下コマンドを使って動作するNIMのVersionを確認いただけます
 
 .. code-block:: cmdin
-  
+
   dpkg -s nms-instance-manager
 
 .. code-block:: bash
@@ -555,6 +555,8 @@ HELMのVersionを確認します
    Password: password   << 左の文字列を入力
   docker push registry.example.com/root/nic/nginxplus-ingress-nap-dos:2.4.1
 
+HELMでNICをデプロイします
+
 .. code-block:: cmdin
 
   cd ~/kubernetes-ingress/deployments/helm-chart-dos-arbitrator
@@ -565,6 +567,8 @@ HELMのVersionを確認します
   cd ~/kubernetes-ingress/deployments/helm-chart
   cp ~/f5j-nginx-observability-lab/prep/helm/nic2-addvalue.yaml .
   helm upgrade --install nic2 -f nic2-addvalue.yaml . -n nginx-ingress
+
+インストールの結果を確認します
 
 .. code-block:: cmdin
 

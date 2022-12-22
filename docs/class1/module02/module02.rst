@@ -400,6 +400,8 @@ NIM への接続
 
 以下コマンドを使って動作するNIMのVersionを確認いただけます
 
+.. code-block:: cmdin
+  
   dpkg -s nms-instance-manager
 
 .. code-block:: bash
@@ -618,11 +620,11 @@ NodePortの情報を確認します。
   
       ##  TCP/UDP LB for NIC2 nginx2 ingressclass
       server {
-          listen 8080;
+          listen 80;
           proxy_pass localhost:31253;  # nic2 http port of NodePort
       }
       server {
-          listen 8443;
+          listen 443;
           proxy_pass localhost:31851;  # nic2 https port of NodePort
       }
   
@@ -803,16 +805,16 @@ Persistent Volumeの状態を確認します。デプロイする各Podに割り
   :caption: 実行結果サンプル
 
   NAME                                        PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-  storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  169m
-
-  NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
-  persistentvolume/pv01   1Gi        RWO            Delete           Bound    default/clickhouse            local-storage            60s
-  persistentvolume/pv02   1Gi        RWO            Delete           Bound    default/core-dqlite           local-storage            54s
-  persistentvolume/pv03   1Gi        RWO            Delete           Bound    default/dpm-dqlite            local-storage            51s
-  persistentvolume/pv04   1Gi        RWO            Delete           Bound    default/dpm-nats-streaming    local-storage            48s
-  persistentvolume/pv05   1Gi        RWO            Delete           Bound    default/integrations-dqlite   local-storage            47s
-  persistentvolume/pv06   1Gi        RWO            Delete           Bound    default/core-secrets          local-storage            45s
+  storageclass.storage.k8s.io/local-storage   kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  13m
   
+  NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
+  persistentvolume/pv01   1Gi        RWO            Delete           Bound    default/dpm-dqlite            local-storage            13m
+  persistentvolume/pv02   1Gi        RWO            Delete           Bound    default/dpm-nats-streaming    local-storage            13m
+  persistentvolume/pv03   1Gi        RWO            Delete           Bound    default/core-secrets          local-storage            13m
+  persistentvolume/pv04   1Gi        RWO            Delete           Bound    default/core-dqlite           local-storage            13m
+  persistentvolume/pv05   1Gi        RWO            Delete           Bound    default/integrations-dqlite   local-storage            13m
+  persistentvolume/pv06   1Gi        RWO            Delete           Bound    default/clickhouse            local-storage            13m
+
 各PodがRunningであることを確認します
 
 .. code-block:: cmdin
@@ -836,8 +838,11 @@ Persistent Volumeの状態を確認します。デプロイする各Podに割り
 
 .. code-block:: cmdin
 
-  cd ~/f5j-nginx-observability-lab/prep/nic
-  cat nms-apigw-vs.yaml
+  cat ~/f5j-nginx-nim-lab/prep/nms-apigw-vs.yaml
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
 
   apiVersion: k8s.nginx.org/v1
   kind: VirtualServer
@@ -857,13 +862,17 @@ Persistent Volumeの状態を確認します。デプロイする各Podに割り
       action:
         pass: nms
 
-  kubectl apply -f nms-apigw-vs.yaml
+設定を反映します
+
+.. code-block:: cmdin
+
+  kubectl apply -f ~/f5j-nginx-nim-lab/prep/nms-apigw-vs.yaml
 
 
 NIM への接続
 ~~~~
 
-踏み台ホストにてChromeを開き、 `http://nms.example.com:8080/ui <http://nms.example.com:8080/ui>`__ に接続してください
+踏み台ホストにてChromeを開き、 `http://nms.example.com/ui <http://nms.example.com/ui>`__ に接続してください
 ログイン情報は以下です。
 
 +--------+---------------+---------------------+
@@ -903,8 +912,7 @@ Docker ImageのBuild
 
   cd ~/f5j-nms-docker-simple
   cp ~/nginx-repo* .
-  sudo ./scripts/buildNIM.sh -C nginx-repo.crt -K nginx-repo.key -i -t nim
-  
+  sudo sh ./scripts/buildNIM.sh -C nginx-repo.crt -K nginx-repo.key -i -t nim
 
 Docker Composeによるコンテナの起動
 ~~~~

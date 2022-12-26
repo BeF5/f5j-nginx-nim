@@ -136,7 +136,7 @@ NGINX Management Suite を Install します
 .. code-block:: cmdin
 
   sudo apt-get update
-  sudo apt-get install -y nms-instance-manager
+  sudo apt-get install -y nms-instance-manager=2.6.0-698150575~jammy
 
 Install時に出力される結果を確認します
 
@@ -226,9 +226,14 @@ Install時に出力される結果を確認します
   sudo cp /etc/nms/nms.conf /etc/nms/nms.conf-
   sudo vi /etc/nms/nms.conf
 
+.. NOTE::
+
+  こちらに示す設定ファイルはNIM v2.6.0 の内容となります
+
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
+  :emphasize-lines: 61-62
 
   # This is default /etc/nms/nms.conf file which is distributed with Linux packages.
 
@@ -307,6 +312,7 @@ Install時に出力される結果を確認します
   # clickhouse_tls_cert_path = /path/to/client-cert.pem
   # clickhouse_tls_ca_path = /etc/ssl/certs/ca-certificates.crt
 
+Clickhouse で指定した適切な ``username`` 、 ``password`` を記述します
 
 NMSを有効にします
 

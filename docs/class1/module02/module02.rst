@@ -92,7 +92,7 @@ Click House Clientを実行し、接続できることを確認します
 
 .. code-block:: cmdin
 
-  clickhouse-cliet --password
+  clickhouse-client --password
 
 .. code-block:: bash
   :linenos:

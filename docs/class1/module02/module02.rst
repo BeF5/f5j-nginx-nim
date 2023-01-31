@@ -9,9 +9,10 @@ NGINX Management Suiteのデプロイ
 
 こちらの作業は `NGINX Management Suite Guide <https://docs.nginx.com/nginx-management-suite/>`__ の内容を参照し、実行しています
 
-
 1. LinuxへのInstall 
 ----
+
+ラボ環境で動作を確認される場合、作業ホストは `ubuntu-host1(10.1.1.5)` となります
 
 - `Installation Guide <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/install-guide/>`__
 
@@ -524,6 +525,8 @@ Vault の Version を確認します
 2. KubernetesへのInstall
 ----
 
+ラボ環境で動作を確認される場合、作業ホストは `ubuntu-master(10.1.1.8)` となります
+
 事前作業
 ~~~~
 
@@ -906,6 +909,8 @@ NIM への接続
 3. Docker ImageのBuild / 実行
 ----
 
+ラボ環境で動作を確認される場合、作業ホストは `ubuntu-host1(10.1.1.5)` となります
+
 Docker ImageのBuild
 ~~~~
 
@@ -914,7 +919,7 @@ Docker ImageのBuild
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/BeF5/f5j-nms-docker-simple.git
+  git clone https://github.com/BeF5/f5j-nms-docker-simple.git --branch v1.0.0
   
 以下コマンドを実行し、Docker Imageを作成します
 

@@ -36,9 +36,8 @@ Windows Jump HostからCLIの操作を行う場合、以下タブからRDP Clien
    - .. image:: ./media/udf_jumpbox_loginuser2.png
        :width: 200
    
-Windows Jump Hostへログインいただくと、SSH
-Clientのショートカットがありますので、そちらをダブルクリックし
-``ubuntu-master`` を示すホストへ接続ください
+Windows Jump Hostへログインいただくと、SSHClientのショートカットがありますので、そちらをダブルクリックし
+マニュアルで示すホストへ接続ください
 
    - .. image:: ./media/putty_icon.jpg
       :width: 50
@@ -56,8 +55,6 @@ Helm とは
 
    .. image:: ./media/helm-structure.jpg
       :width: 400
-
-このラボでは、NGINX Ingress Controller(NIC)、NGINX Service Mesh(NSM)、各種監視コンポーネントをHelmを使ってデプロイします
 
 
 デプロイする構成について

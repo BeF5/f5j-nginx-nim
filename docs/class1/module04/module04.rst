@@ -1,10 +1,11 @@
-Docker ContainerでのNMSの利用 
+Docker ContainerでのNMSのデプロイ
 ####
 
 本手順ではいくつかの環境でNMS/NIMをご利用いただくにあたり、セットアップ手順を複数紹介します。
 環境にあった手順を実施してください。
 
-こちらの作業は `NGINX Management Suite Guide <https://docs.nginx.com/nginx-management-suite/>`__ の内容を参照し、実行しています
+こちらはラボでの利用を目的とした参考手順となります。
+その他手順は `NGINX Management Suite Guide <https://docs.nginx.com/nginx-management-suite/>`__ をご確認ください。
 
 
 ラボ環境で動作を確認される場合、作業ホストは ``ubuntu-host1(10.1.1.5)`` となります
@@ -17,13 +18,13 @@ Docker ContainerでのNMSの利用
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/BeF5/f5j-nms-docker-simple.git --branch v1.0.0
+  git clone https://github.com/BeF5/f5j-nms-docker-simple.git --branch v1.1.0
   
 以下コマンドを実行し、Docker Imageを作成します
 
 .. code-block:: cmdin
 
-  cd ~/f5j-nms-docker-simple
+  cd ~/f5j-nms-docker-simple/docker-compose
   cp ~/nginx-repo* .
   sudo sh ./scripts/buildNIM.sh -C nginx-repo.crt -K nginx-repo.key -i -t nim
 
@@ -34,7 +35,7 @@ docker-compose でコンテナを実行します
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nms-docker-simple
+  ## cd ~/f5j-nms-docker-simple/docker-compose
   sudo docker-compose -f docker-compose.yaml up -d
 
 NIMが正しく動作した場合のサンプルのステータスを示します  

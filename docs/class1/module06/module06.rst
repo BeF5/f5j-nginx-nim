@@ -98,10 +98,6 @@ NGINX Agentを起動します
 
 Container Imageの参考手順は `NGINX Container Build <https://f5j-nginx-container-build.readthedocs.io/en/latest/index.html>`__ の ``agent-`` から始まるイメージのビルド方法を参照してください。
 
-
-.. code-block:: cmdin
-
-
 0. 必要なファイルの取得
 ~~~~
 
@@ -115,7 +111,7 @@ Container Imageの参考手順は `NGINX Container Build <https://f5j-nginx-cont
 1. Docker Build
 ~~~~
 
-Base OS Image ``Ubuntu20.04`` , ``NGINX Plus, NAP WAF + NGINX Agent`` Docker Image
+Base OS Image ``Ubuntu20.04`` , ``NGINX Plus, NAP WAF + NGINX Agent`` Docker Image をビルドするコマンドです
 
 .. code-block:: cmdin
 
@@ -153,7 +149,7 @@ Docker Compose fileの内容は以下のような構成となります
   - ``NMS_INSTANCEGROUP (option)`` : インスタンス接続時にインスタンスグループに登録する場合のグループ名(napw-cluster)
   - ``NMS_TAG (option)`` : インスタンス接続時にタグを付与して登録する場合のタグ(napw-proxy)
 
-Docker Compose コマンドの実行します。
+Docker Compose コマンドを実行します。
 
 .. Note::
 

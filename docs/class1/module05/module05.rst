@@ -22,6 +22,7 @@ AnsibleのNMSデプロイ
 以下コマンドを実行し、Ansibleを利用してNMSをデプロイします。
 
 Ansibleのセットアップなど参考情報は以下のページを参照してください
+
 - `Ansible実行環境のセットアップ <https://f5j-nginx-ansible.readthedocs.io/en/latest/class1/module2/module2.html>`__
 
 .. NOTE::

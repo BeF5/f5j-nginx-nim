@@ -1,4 +1,4 @@
-Docker ContainerでのNMSのデプロイ
+Docker ContainerのNMSデプロイ
 ####
 
 本手順ではいくつかの環境でNMS/NIMをご利用いただくにあたり、セットアップ手順を複数紹介します。
@@ -18,7 +18,7 @@ Docker ContainerでのNMSのデプロイ
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/BeF5/f5j-nms-docker-simple.git --branch v1.1.0
+  git clone https://github.com/BeF5/f5j-nms-docker-simple.git
   
 以下コマンドを実行し、Docker Imageを作成します
 

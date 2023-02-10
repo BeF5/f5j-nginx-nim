@@ -7,7 +7,6 @@ Docker ContainerのNMSデプロイ
 こちらはラボでの利用を目的とした参考手順となります。
 その他手順は `NGINX Management Suite Guide <https://docs.nginx.com/nginx-management-suite/>`__ をご確認ください。
 
-
 ラボ環境で動作を確認される場合、作業ホストは ``ubuntu-host1(10.1.1.5)`` となります
 
 1. Docker ImageのBuild
@@ -19,14 +18,31 @@ Docker ContainerのNMSデプロイ
 
   cd ~/
   git clone https://github.com/BeF5/f5j-nms-docker-simple.git
-  
-以下コマンドを実行し、Docker Imageを作成します
+
+
+.. NOTE::
+
+  予め実行ホストにNGINXリポジトリにアクセスするための証明書・鍵を保存してください
+  ``ubuntu-host1(10.1.1.5)`` では以下コマンドによりファイルの取得が可能です
+
+  .. code-block:: bash
+
+     scp 10.1.1.8:nginx-repo* .
+
+以下コマンドを実行し、Docker Imageを作成します。以下はNIMのみの構成です
 
 .. code-block:: cmdin
 
   cd ~/f5j-nms-docker-simple/docker-compose
   cp ~/nginx-repo* .
   sudo sh ./scripts/buildNIM.sh -C nginx-repo.crt -K nginx-repo.key -i -t nim
+
+
+NIMに加え、ACM(API Connectivity Manasger)、SM(Security Monitoring)、WAF Compilerをデプロイする場合は以下コマンドとなります。
+
+.. code-block:: cmdin
+
+  sudo sh ./scripts/buildNIM.sh -A -W -P v4.100.1 -C nginx-repo.crt -K nginx-repo.key -i -t nim-acm-sp-waf
 
 2. Docker Composeによるコンテナの起動
 ----
@@ -37,6 +53,15 @@ docker-compose でコンテナを実行します
 
   ## cd ~/f5j-nms-docker-simple/docker-compose
   sudo docker-compose -f docker-compose.yaml up -d
+
+
+NIMに加え、ACM(API Connectivity Manasger)、SM(Security Monitoring)、WAF Compilerを実行する場合は、 ``docker-compose-acm-sp-waf.yaml`` を指定してください
+
+.. code-block:: cmdin
+
+  ## cd ~/f5j-nms-docker-simple/docker-compose
+  docker compose -f docker-compose-acm-sp-waf.yaml up -d
+
 
 NIMが正しく動作した場合のサンプルのステータスを示します  
 動作するDockerイメージの状態。clickhouseと前の手順でBuildしたnimのイメージが動作します

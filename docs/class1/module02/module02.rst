@@ -8,7 +8,7 @@ LinuxのNMSデプロイ
 
 ラボ環境で動作を確認される場合、作業ホストは ``ubuntu-host1(10.1.1.5)`` となります
 
-- `Installation Guide <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/install-guide/>`__
+- `Installation Guide (On-Premises) <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/install-guide/>`__
 
 1. Click HouseのInstall
 ----
@@ -110,6 +110,9 @@ Click House Clientを実行し、接続できることを確認します
 2. NMSのinstall
 ----
 
+1. 事前準備
+~~~~
+
 インストールに利用する証明書・鍵をコピーします
 
 .. code-block:: cmdin
@@ -117,7 +120,7 @@ Click House Clientを実行し、接続できることを確認します
   sudo mkdir -p /etc/ssl/nginx
   sudo cp ~/nginx-repo.* /etc/ssl/nginx
 
-Installに必要なコンポーネントの取得、Installを行います
+インストールに必要なコンポーネントの取得、Installを行います
 
 .. code-block:: cmdin
 
@@ -126,12 +129,16 @@ Installに必要なコンポーネントの取得、Installを行います
   wget -O /tmp/nginx_signing.key https://cs.nginx.com/static/keys/nginx_signing.key
   sudo apt-key add /tmp/nginx_signing.key
 
-NGINX Management Suite を Install します
+2. NGINX Management Suite(NMS) のインストール
+~~~~
+
+NMSのプラットフォームとなる ``NGINX Instance Manager(NIM)`` をインストールします。
+その他のコンポーネント(ACMなど)を利用する場合にもこちらのコンポーネントがベースとなりますので、 こちらの手順を実施してください。
 
 .. code-block:: cmdin
 
   sudo apt-get update
-  sudo apt-get install -y nms-instance-manager=2.6.0-698150575~jammy
+  sudo apt-get install -y nms-instance-manager
 
 Install時に出力される結果を確認します
 
@@ -223,89 +230,110 @@ Install時に出力される結果を確認します
 
 .. NOTE::
 
-  こちらに示す設定ファイルはNIM v2.6.0 の内容となります
+  こちらに示す設定ファイルはNIM v2.7.0以上 の内容となります
 
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 61-62
+  :emphasize-lines: 61-66
 
   # This is default /etc/nms/nms.conf file which is distributed with Linux packages.
-
-  user = nms
-  access_log = stdout
-  error_log = stderr
-  log_encoding = console
-  log_level = error
-  # enable this for core on tcp
-  # core_address = 127.0.0.1:8033
-  core_address = unix:/var/run/nms/core.sock
-  core_grpc_address = unix:/var/run/nms/coregrpc.sock
-  core_secrets_dir = /var/lib/nms/secrets/
-  # enable this for dpm on tcp
-  # dpm_address = 127.0.0.1:8034
-  dpm_address = unix:/var/run/nms/dpm.sock
-  # enable this for dpm grpc server on tcp
-  # dpm_grpc_addr = 127.0.0.1:8036
-  dpm_grpc_addr = unix:/var/run/nms/am.sock
-  # enable this for integrations on tcp
-  # integrations_address = 127.0.0.1:8037
-  integrations_address = unix:/var/run/nms/integrations.sock
-  daemon = 1
   
-  # Catalogs config
-  metrics_data_dir = /usr/share/nms/catalogs/metrics
-  events_data_dir = /usr/share/nms/catalogs/events
-  dimensions_data_dir = /usr/share/nms/catalogs/dimensions
+  user: nms
+  daemon: true
+  # Root dqlite db directory. Each sub directory here is dedicated to the process
+  db_root_dir: /var/lib/nms/dqlite
   
-  # enable this for ingestion grpc server on tcp
-  # ingest_grpc_addr = 127.0.0.1:8035
-  ingest_grpc_addr = unix:/var/run/nms/ingestion.sock
+  # default log level for all processes. Each process can override this level.
+  log:
+    encoding: console
+    level: error
   
-  # enable this for integrations on tcp
-  # integrations_http_addr = 127.0.0.1:8037
-  integrations_http_addr = unix:/var/run/nms/integrations.sock
+  modules:
+    prefix: /var/lib/nms
+    # NMS modules config are available here to be read if installed
+    conf_dir: /etc/nms/modules
   
-  # Root dqlite db directory
-  ctr_db_root_dir = /var/lib/nms/dqlite # each sub directory here is dedicated to the process
+  core:
+    # enable this for core on tcp
+    # address: 127.0.0.1:8033
+    address: unix:/var/run/nms/core.sock
+    grpc_addr: unix:/var/run/nms/coregrpc.sock
+    analytics:
+      # Catalogs config
+      catalogs:
+        metrics_data_dir: /usr/share/nms/catalogs/metrics
+        events_data_dir: /usr/share/nms/catalogs/events
+        dimensions_data_dir: /usr/share/nms/catalogs/dimensions
+    # Dqlite config
+    dqlite:
+      addr: 127.0.0.1:7891
+    # disable this to prevent automatic cleanup on a module removal of it's RBAC features and permissions
+    disable_rbac_cleanup: false
   
-  # Dqlite config
-  dpm_dqlite_db_addr = 127.0.0.1:7890
-  core_dqlite_db_addr = 127.0.0.1:7891
-  integrations_dqlite_db_addr = 127.0.0.1:7892
+  dpm:
+    # enable this for dpm on tcp
+    # address: 127.0.0.1:8034
+    address: unix:/var/run/nms/dpm.sock
+    # enable this for dpm grpc server on tcp
+    # grpc_addr: 127.0.0.1:8036
+    grpc_addr: unix:/var/run/nms/am.sock
+    # Dqlite config
+    dqlite:
+      addr: 127.0.0.1:7890
+    # NATS config
+    nats:
+      address: nats://127.0.0.1:9100
+      # nats streaming
+      store_root_dir: /var/lib/nms/streaming
+      # 10GB
+      max_store_bytes: 10737418240
+      # 1GB
+      max_memory_bytes: 1073741824
+      # https://docs.nats.io/reference/faq#is-there-a-message-size-limitation-in-nats
+      # 8MB
+      max_message_bytes: 8388608
   
-  # NATS config
-  nats_address = nats://127.0.0.1:9100
-  # nats streaming
-  nats_store_root_dir = /var/lib/nms/streaming
-  # 10GB
-  nats_max_store_bytes = 10737418240
-  # 1GB
-  nats_max_memory_bytes = 1073741824
-  # https://docs.nats.io/reference/faq#is-there-a-message-size-limitation-in-nats
-  # 8MB
-  nats_max_message_bytes = 8388608
+  integrations:
+    # enable this for integrations on tcp
+    # address: 127.0.0.1:8037
+    address: unix:/var/run/nms/integrations.sock
+    # Dqlite config
+    dqlite:
+      addr: 127.0.0.1:7892
+    app_protect_security_update:
+      # Enable this setting to automatically retrieve the latest Attack Signatures and Threat Campaigns.
+      # enable: true
+      # Enable this setting to specify how often, in hours, the latest Attack Signatures and Threat Campaigns are retrieved.
+      # The default interval is 6 hours, the maximum interval is 48 hours, and the minimum is 1 hour.
+      # interval: 6
+      # Enable this setting to specify how many updates to download for the latest Attack Signatures and Threat Campaigns.
+      # By default, the 10 latest updates are downloaded. The maximum value is 20, and the minimum value is 1.
+      # number_of_updates: 10
   
-  modules_prefix = /var/lib/nms
+  ingestion:
+    # enable this for ingestion grpc server on tcp
+    # grpc_addr: 127.0.0.1:8035
+    grpc_addr: unix:/var/run/nms/ingestion.sock
   
   # ClickHouse config for establishing a ClickHouse connection
-  # Below address not used if TLS mode is enabled
-  # clickhouse_address = 127.0.0.1:9000
-  # Ensure username and password are wrapped in quotes
-  clickhouse_username = 'default' << 適切に接続できるようにパラメータを指定してください
-  clickhouse_password = 'password' << 適切に接続できるようにパラメータを指定してください
-  
-  ### TLS configurations for ClickHouse connections
-  # TLS is turned off by default
-  # clickhouse_tls_mode = true
-  # Address pointing to <tcp_port_secure> of ClickHouse
-  # Below CH address is used when TLS mode is active
-  # clickhouse_tls_address = 127.0.0.1:9440
-  # Verification should be skipped for self-signed certificates
-  # clickhouse_tls_skip_verify = true
-  # clickhouse_tls_key_path = /path/to/client-key.pem
-  # clickhouse_tls_cert_path = /path/to/client-cert.pem
-  # clickhouse_tls_ca_path = /etc/ssl/certs/ca-certificates.crt
+  clickhouse:
+  #   # Below address not used if TLS mode is enabled
+    address: 127.0.0.1:9000
+  #   # Ensure username and password are wrapped in quotes
+    username: 'default'
+    password: 'password'
+  #   # Enable TLS configurations for ClickHouse connections
+  #   tls:
+  #     # Address pointing to <tcp_port_secure> of ClickHouse
+  #     # Below CH address is used when TLS mode is active
+  #     tls_address: 127.0.0.1:9440
+  #     # Verification should be skipped for self-signed certificates
+  #     skip_verify: true
+  #     key_path: /path/to/client-key.pem
+  #     cert_path: /path/to/client-cert.pem
+  #     ca_path: /etc/ssl/certs/ca-certificates.crt
+
 
 Clickhouse で指定した適切な ``username`` 、 ``password`` を記述します
 
@@ -380,6 +408,161 @@ NGINXが正しく起動していることを確認します
   Dec 13 10:50:05 ip-10-1-1-5 systemd[1]: Starting A high performance web server and a reverse proxy server...
   Dec 13 10:50:05 ip-10-1-1-5 systemd[1]: Started A high performance web server and a reverse proxy server.
 
+3. API Connectivity Manager(ACM)のインストール
+~~~~
+
+こちらの手順は `Install NGINX Management Suite Modules
+ <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``API CONNECTIVITY MANAGER`` のタブを参考にしています
+
+ACMをインストールします
+
+.. code-block:: cmdin
+
+  # sudo apt-get update
+  sudo apt-get install -y nms-api-connectivity-manager
+
+NMSを起動します
+
+.. code-block:: cmdin
+
+  sudo systemctl enable nms-acm
+
+  sudo systemctl restart nms
+  sudo systemctl restart nms-core
+  sudo systemctl restart nms-dpm
+  sudo systemctl restart nms-ingestion
+  sudo systemctl restart nms-integrations
+  sudo systemctl restart nginx
+  sudo systemctl start nms-acm
+
+ACMが正しく起動していることを確認します
+
+.. code-block:: cmdin
+
+  sudo systemctl status nms-acm
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  ● nms-acm.service - NGINX Management Suite - API Connectivity Manager
+       Loaded: loaded (/lib/systemd/system/nms-acm.service; enabled; vendor preset: enabled)
+       Active: active (running) since Fri 2023-02-10 02:43:05 UTC; 27s ago
+         Docs: https://www.nginx.com/products/api-connectivity-manager
+     Main PID: 12451 (nms-acm)
+        Tasks: 13 (limit: 9445)
+       Memory: 18.2M
+       CGroup: /system.slice/nms-acm.service
+               └─12451 /usr/bin/nms-acm server
+  
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:119     >
+  Feb 10 02:43:08 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:37      >
+  Feb 10 02:43:09 ip-10-1-1-6 acm[12451]: [INFO]         acm                                          templates/service.go:61      >
+
+プロセスの動作状況の結果を参考に示します
+
+.. code-block:: cmdin
+
+  ps aufx | grep nms
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  ubuntu     12607  0.0  0.0   8160   672 pts/0    S+   02:55   0:00              \_ grep --color=auto nms
+  nms        12385  0.2  0.7 1376852 62380 ?       Ssl  02:43   0:01 /usr/bin/nms-core
+  nms        12435  0.3  0.7 1379940 63544 ?       Ssl  02:43   0:02 /usr/bin/nms-dpm
+  nms        12479  0.1  0.3 1265868 31216 ?       Ssl  02:43   0:01 /usr/bin/nms-ingestion
+  nms        12515  0.0  0.5 1334052 42072 ?       Ssl  02:43   0:00 /usr/bin/nms-integrations
+  nms        12595  1.1  0.7 1268892 63196 ?       Ssl  02:53   0:01 /usr/bin/nms-acm server
+
+
+4. Security Monitoring(SM)のインストール
+~~~~
+
+こちらの手順は `Install NGINX Management Suite Modules
+ <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``SECURITY MONITORING`` のタブを参考にしています
+
+SMをインストールします
+
+.. code-block:: cmdin
+
+  # sudo apt-get update
+  sudo apt-get install -y nms-sm
+
+NMSを起動します
+
+.. code-block:: cmdin
+
+  sudo systemctl restart nms
+  sudo systemctl restart nms-core
+  sudo systemctl restart nms-dpm
+  sudo systemctl restart nms-ingestion
+  sudo systemctl restart nms-integrations
+  sudo systemctl restart nginx
+
+プロセスの動作状況の結果を参考に示します。 ``SMの名称のプロセスは動作しません。``
+
+.. code-block:: cmdin
+
+  ps aufx | grep nms
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  ubuntu     12607  0.0  0.0   8160   672 pts/0    S+   02:55   0:00              \_ grep --color=auto nms
+  nms        12385  0.2  0.7 1376852 62380 ?       Ssl  02:43   0:01 /usr/bin/nms-core
+  nms        12435  0.3  0.7 1379940 63544 ?       Ssl  02:43   0:02 /usr/bin/nms-dpm
+  nms        12479  0.1  0.3 1265868 31216 ?       Ssl  02:43   0:01 /usr/bin/nms-ingestion
+  nms        12515  0.0  0.5 1334052 42072 ?       Ssl  02:43   0:00 /usr/bin/nms-integrations
+  nms        12595  1.1  0.7 1268892 63196 ?       Ssl  02:53   0:01 /usr/bin/nms-acm server
+
+
+5. WAF Compilerのインストール
+~~~~
+
+こちらの手順は `Set Up App Protect WAF Configuration Management <https://docs.nginx.com/nginx-management-suite/nim/how-to/app-protect/setup-waf-config-management/>`__ を参考にしています
+
+
+WAF Compilerをインストールします
+
+.. code-block:: cmdin
+
+  # sudo apt-get update
+  sudo apt-get install -f nms-nap-compiler-v4.2.0
+
+NMSを起動します
+
+.. code-block:: cmdin
+
+  sudo systemctl restart nms-integrations
+
+プロセスの動作状況の結果を参考に示します。 ``Compilerの名称のプロセスは動作しません。``
+
+.. code-block:: cmdin
+
+  ps aufx | grep nms
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  ubuntu     18301  0.0  0.0   8160   672 pts/0    S+   03:09   0:00              \_ grep --color=auto nms
+  nms        12988  0.2  0.7 1378084 59972 ?       Ssl  03:00   0:01 /usr/bin/nms-core
+  nms        13046  0.4  0.7 1380308 59392 ?       Ssl  03:00   0:02 /usr/bin/nms-dpm
+  nms        13089  0.1  0.4 1265868 32516 ?       Ssl  03:00   0:00 /usr/bin/nms-ingestion
+  nms        13180  0.2  0.5 1334620 42576 ?       Ssl  03:01   0:01 /usr/bin/nms-acm server
+  nms        18269  1.2  0.3 1284656 29796 ?       Ssl  03:09   0:00 /usr/bin/nms-integrations
+
+
 3. NMS への接続
 ----
 
@@ -399,7 +582,21 @@ NGINXが正しく起動していることを確認します
 (Option) NMS の Version確認
 ----
 
-以下コマンドを使って動作するNIMのVersionを確認いただけます
+正しく意図したバージョンがインストールされていることを確認してください。
+
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  $ dpkg -l | grep nms
+  ii  nms-api-connectivity-manager     1.4.1-762997411~focal              amd64        NGINX Management Suite ACM Module.
+  ii  nms-instance-manager             2.8.0-759861272~focal              amd64        NGINX Management Suite - Instance Manager (core system)
+  ii  nms-nap-compiler-v4.2.0          4.2.0-1~focal                      amd64        NGINX App Protect repackaged compiler for compatability with NGINX Instance Manager
+  ii  nms-sm                           1.2.0-751410248~focal              amd64        NGINX Security Monitoring Dashboard Module
+
+
+以下コマンドを使ってインストールしたNIMの詳細情報を確認いただけます
 
 .. code-block:: cmdin
 
@@ -412,15 +609,15 @@ NGINXが正しく起動していることを確認します
   Package: nms-instance-manager
   Status: install ok installed
   Priority: optional
-  Installed-Size: 188463
+  Installed-Size: 208328
   Maintainer: NGINX Packaging <nginx-packaging@f5.com>
   Architecture: amd64
-  Version: 2.6.0-698150575~focal
-  Depends: adduser, gawk, lsb-release, nginx (>= 1.18.0) | nginx-plus (>= 22), openssl, rsyslog, systemd, tar
+  Version: 2.8.0-759861272~focal
+  Depends: adduser, gawk, lsb-release, nginx-plus (>= 22) | nginx (>= 1.18.0), openssl, rsyslog, systemd, tar
   Recommends: clickhouse-server (>= 21.3.19.1), openssl (>= 1.1.1)
   Conffiles:
    /etc/logrotate.d/nms.conf 9c4dc2b56a4496bb35547f205a81d750
-   /etc/nginx/conf.d/nms-http.conf a4fa61b58ad35d03e1e3d7c6970797ee
+   /etc/nginx/conf.d/nms-http.conf e9f45890256ca87cc64737de6aeb998f
    /etc/nms/nginx/.htpasswd d41d8cd98f00b204e9800998ecf8427e
    /etc/nms/nginx/errors-grpc.loc_conf 602e26ca21e12a11262c170f88e90c38
    /etc/nms/nginx/errors-grpc.server_conf 73f48a717d8e7cb6ce73cdc22efc67b3
@@ -428,7 +625,7 @@ NGINXが正しく起動していることを確認します
    /etc/nms/nginx/oidc/openid_configuration.conf 42b3c5cb96e5b8a0df87d8c882e59077
    /etc/nms/nginx/upstreams/README.md f29b0fe2b4d6856f26f7286f3c9e0579
    /etc/nms/nginx/upstreams/mapped_apis/README.md c287571d3c9cddf6a85d2cdd6fc14dae
-   /etc/nms/nms.conf f63c6974768ec18a39977667b3bd820a
+   /etc/nms/nms.conf 88e66e7f0f891bb3c4d8dc0ac7871f6e
    /etc/rsyslog.d/nms.conf 3fdc4c5ef473f05d85251266b30d8521
    /usr/lib/systemd/system/nms-core.service 3bb5bb05e05e9dd1ff62d6f9ea650e3b
    /usr/lib/systemd/system/nms-dpm.service 9ee5e027e6694ee988c78eff4e043a26
@@ -439,6 +636,11 @@ NGINXが正しく起動していることを確認します
   Description: NGINX Management Suite - Instance Manager (core system)
   Homepage: https://www.nginx.com/products/nginx-instance-manager/
 
+
+(Option) SMへSignatureのinstall
+----
+
+ - `Set Up Attack Signatures and Threat Campaigns <https://docs.nginx.com/nginx-management-suite/nim/how-to/app-protect/setup-waf-config-management/#set-up-attack-signatures-and-threat-campaigns>`__
 
 (Option) Vault の Install (作成中)
 ----

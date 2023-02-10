@@ -235,7 +235,8 @@ Install時に出力される結果を確認します
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 61-66
+  :emphasize-lines: 81-86
+
 
   # This is default /etc/nms/nms.conf file which is distributed with Linux packages.
   
@@ -411,8 +412,7 @@ NGINXが正しく起動していることを確認します
 3. API Connectivity Manager(ACM)のインストール
 ~~~~
 
-こちらの手順は `Install NGINX Management Suite Modules
- <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``API CONNECTIVITY MANAGER`` のタブを参考にしています
+こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``API CONNECTIVITY MANAGER`` のタブを参考にしています
 
 ACMをインストールします
 
@@ -487,8 +487,7 @@ ACMが正しく起動していることを確認します
 4. Security Monitoring(SM)のインストール
 ~~~~
 
-こちらの手順は `Install NGINX Management Suite Modules
- <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``SECURITY MONITORING`` のタブを参考にしています
+こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``SECURITY MONITORING`` のタブを参考にしています
 
 SMをインストールします
 

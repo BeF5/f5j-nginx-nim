@@ -49,6 +49,7 @@ HELMについて
 ====
 
 Helm とは
+
 - Kubernetes用パッケージマネージャ
 - Helmは、Kubernetes 用に構築されたソフトウェアを検索、共有、使用するための方法です。
 - Kubernetes環境にソフトウェアを簡単にデプロイできます

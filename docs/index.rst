@@ -14,8 +14,14 @@ F5 Labs - Index
 
 このラボはNGINX Instnace Managerのインストールや利用方法をご確認いただけます
 
-| 関連する情報は以下を参照してください。
-| (ラボの実施内容と異なりますが、参考資料としてご利用いただけます)
+
+NGINX セットアップガイド トップページ
+====
+
+NGINX のその他ラボガイドは以下を参照してください
+
+- `NGINX セットアップガイド・ラボガイド <https://f5j-tech-info.readthedocs.io/ja/latest/content03/content3.html>`__
+
 
 参考資料
 -----

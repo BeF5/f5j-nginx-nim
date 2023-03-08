@@ -61,7 +61,7 @@ AgentをインストールしたNGINXは設定をNIM経由で変更・管理す�
 
 設定ファイル内のディレクティブにマウスカーソルを合わせると、それらの簡単な解説が英語表記で表示されます。
 
-以下は ``nginx.conf`` 内、 ``log_format`` 、 ``include`` にカーソルをあわせた場合の表示です
+以下は ``nginx.conf`` 内、 ``include`` 、 ``access_log`` にカーソルをあわせた場合の表示です
 
    .. image:: ./media/nim-setting-commandsyntax.png
       :width: 400
@@ -81,6 +81,8 @@ AgentをインストールしたNGINXは設定をNIM経由で変更・管理す�
 変更内容を破棄し、元の状態に戻す(Revert)が可能です。
 先程誤った場所に ``server block`` を記述した状態で、画面右上の ``Revert`` をクリックします。その後設定が元の状態に戻ります
 
+   .. image:: ./media/nim-setting-revert.png
+      :width: 400
 
 7. 新たな設定ファイルの作成
 ====
@@ -193,10 +195,16 @@ Instanceにログインし、状態を確認します
 
 ポップアップメニューが表示されます。 ``Delete`` をクリックします
 
-   .. image:: ./media/nim-setting-delete.png
+   .. image:: ./media/nim-setting-delete2.png
       :width: 400
 
 設定の反映と同様に、画面右上の ``Publish`` をクリックし、状態を反映します。
+
+   .. image:: ./media/nim-setting-delete3.png
+      :width: 400
+
+   .. image:: ./media/nim-setting-delete4.png
+      :width: 400
 
 Instanceにログインし、状態を確認します
 
@@ -210,17 +218,6 @@ Instanceにログインし、状態を確認します
   total 8
   -rw-r--r-- 1 root root 1508 Mar  7 16:08 default.conf
 
-
-.. code-block:: bash
-  :linenos:
-  :caption: 生成されたファイルの内容
-
-  $ cat /etc/nginx/conf.d/nim-test.conf
-  server {
-    listen 81;
-    return 200 "nim test";
-  }
-
 .. code-block:: bash
   :linenos:
   :caption: 反映された内容の確認
@@ -233,32 +230,25 @@ Instanceにログインし、状態を確認します
 
 `設定内容の反映 <>`__ でStaged Configとして保存した内容を反映します
 
-画面左メニューの ``Staged Configs`` をクリックします
+画面左メニューの ``Staged Configs`` をクリックします。
+先程保存したコンフィグが表示されています。該当のコンフィグをクリックします
 
    .. image:: ./media/nim-setting-stagedconfig.png
       :width: 400
 
-先程保存したコンフィグが表示されています。該当のコンフィグをクリックします
+こちらには先程保存した内容が表示されています。
+画面右上の ``Publish to...`` をクリックします。
 
    .. image:: ./media/nim-setting-stagedconfig2.png
       :width: 400
 
-こちらには先程保存した内容が表示されています。
+
+Staged Configを作成したインスタンスと ``別のインスタンス`` を選択し、 ``Publish`` をクリックします
 
    .. image:: ./media/nim-setting-stagedconfig3.png
       :width: 400
 
-画面右上の ``Publish to...`` をクリックします。
-
-   .. image:: ./media/nim-setting-stagedconfig4.png
-      :width: 400
-
-Staged Configを作成したインスタンスと別のインスタンスを選択し、 ``Publish`` をクリックします
-
-   .. image:: ./media/nim-setting-stagedconfig5.png
-      :width: 400
-
 設定が正しく反映されたことが確認できます
 
-   .. image:: ./media/nim-setting-stagedconfig6.png
+   .. image:: ./media/nim-setting-stagedconfig4.png
       :width: 400

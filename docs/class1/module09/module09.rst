@@ -82,13 +82,13 @@ API接続を行った結果が表示されます。curlコマンドは実際に�
 1. インスタンスの情報
 ----
 
-`GUI インスタンスの情報 <>`__ で実施した内容をCLIで実行します
+`GUI インスタンスの情報 <#id1>`__ で実施した内容をCLIで実行します
 
 curl コマンドを実行します
 
 .. code-block:: cmdin
 
-  curl -sk -u "admin:nimadmin" 'https://10.1.1.9/api/platform/v1/instances?napOnly=false' |  jq .
+  curl -sk -u "admin:nimadmin" 'https://10.1.1.5/api/platform/v1/instances?napOnly=false' |  jq .
 
 .. code-block:: bash
   :linenos:
@@ -126,13 +126,13 @@ curl コマンドを実行します
 2. 設定情報の取得 
 ----
 
-`GUI 設定情報の取得 <>`__ で実施した内容をCLIで実行します
+`GUI 設定情報の取得 <#id2>`__ で実施した内容をCLIで実行します
 
 curl コマンドを実行します
 
 .. code-block:: cmdin
 
-  curl -sk -u "admin:nimadmin" https://10.1.1.9/api/platform/v1/configs | jq .
+  curl -sk -u "admin:nimadmin" https://10.1.1.5/api/platform/v1/configs | jq .
 
 .. code-block:: bash
   :linenos:
@@ -164,7 +164,7 @@ curl コマンドを実行します
 3. 特定saved configの詳細 
 ----
 
-`CLI 設定情報の取得 <>`__ で確認した情報の詳細を確認します
+`CLI 設定情報の取得 <#id4>`__ で確認した情報の詳細を確認します
 
 API Documentationを確認すると、情報の取得を行うURLは ``/configs/{configUid}`` であることがわかります
 
@@ -174,13 +174,13 @@ API Documentationを確認すると、情報の取得を行うURLは ``/configs/
 GUIで ``Try it out`` から ``configUid`` を指定し動作を確認いただくことも可能です。
 こちらではCLIで実行する方法を以下の通り示します
 
-``configUid`` に入力する情報は、 `CLI 設定情報の取得 <>`__ の ``uid`` となります。
+``configUid`` に入力する情報は、 `CLI 設定情報の取得 <#id4>`__ の ``uid`` となります。
 こちらの情報を指定したcurlコマンドが以下となります。こちらのコマンドを実行します
 
 
 .. code-block:: cmdin
 
-  curl -sk -u "admin:nimadmin" https://10.1.1.9/api/platform/v1/configs/d679d216-799e-49d3-8139-c9b8a7bb2512 | jq .
+  curl -sk -u "admin:nimadmin" https://10.1.1.5/api/platform/v1/configs/d679d216-799e-49d3-8139-c9b8a7bb2512 | jq .
 
 .. code-block:: bash
   :linenos:
@@ -227,7 +227,7 @@ GUIで ``Try it out`` から ``configUid`` を指定し動作を確認いただ�
 4. 設定の反映 
 ----
 
-`CLI インスタンスの情報 <>`__ 、 `CLI 特定saved configの詳細  <>`__ で確認した情報を元に設定を反映します
+`CLI インスタンスの情報 <#id3>`__ 、 `CLI 特定saved configの詳細  <#saved-config>`__ で確認した情報を元に設定を反映します
 
 API Documentationを確認すると、設定を反映するURLは ``/systems/{systemUid}/instances/{nginxUid}/config`` であることがわかります
 また、設定の反映は ``POST`` Method で、JSON形式で設定情報の送付が必要となります。
@@ -239,7 +239,7 @@ API Documentationを確認すると、設定を反映するURLは ``/systems/{sy
 
 .. code-block:: cmdin
 
-  cat file2.txt
+  cat file1.txt
 
 .. code-block:: bash
   :linenos:
@@ -277,8 +277,8 @@ API Documentationを確認すると、設定を反映するURLは ``/systems/{sy
   }
 
 
-- `CLI 特定saved configの詳細  <>`__ で取得した結果の ``auxFiles`` 、 ``configFiles`` をそのまま記載しています。
-- ``configUid`` に入力する情報は、 `CLI 設定情報の取得 <>`__ の ``uid`` と同じ値となります。
+- `CLI 特定saved configの詳細  <#saved-config>`__ で取得した結果の ``auxFiles`` 、 ``configFiles`` をそのまま記載しています。
+- ``configUid`` に入力する情報は、 `CLI 設定情報の取得 <#id4>`__ の ``uid`` と同じ値となります。
 - ``ignoreConflict`` は設定の反映に関する条件を指定します。 ``false`` の場合、実機より新しいstaged configが反映されます。 ``ture`` の場合にはファイルの更新日時を無視し設定を反映します
 
 こちらの設定情報を ``ip-10-1-1-7`` に以下curlコマンドで設定を反映します。
@@ -294,7 +294,7 @@ URLに指定する ``systemUid`` 、 ``nginxUid`` は以下の内容となりま
 
 .. code-block:: cmdin
 
-  curl -sk -u "admin:nimadmin" -H "Content-Type: application/json"  https://10.1.1.9/api/platform/v1/systems/74d52621-eb60-35ea-84f2-8f754974d560/instances/754ddc18-898a-59ee-b5a3-fe22cf6b3da6/config -X POST -d @file1.txt | jq .
+  curl -sk -u "admin:nimadmin" -H "Content-Type: application/json"  https://10.1.1.5/api/platform/v1/systems/74d52621-eb60-35ea-84f2-8f754974d560/instances/754ddc18-898a-59ee-b5a3-fe22cf6b3da6/config -X POST -d @file1.txt | jq .
 
 .. code-block:: bash
   :linenos:

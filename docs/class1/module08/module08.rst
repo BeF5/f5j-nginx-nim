@@ -214,7 +214,7 @@ Instanceにログインし、状態を確認します
 
 .. code-block:: bash
   :linenos:
-  :caption: 生成されたファイルの情報
+  :caption: ファイルの情報(ファイルの削除)
 
   $ ls -l /etc/nginx/conf.d
   total 8
@@ -222,7 +222,7 @@ Instanceにログインし、状態を確認します
 
 .. code-block:: bash
   :linenos:
-  :caption: 反映された内容の確認
+  :caption: 反映された内容の確認(ファイルの削除)
 
   $ curl localhost:81
   curl: (7) Failed to connect to localhost port 81: Connection refused

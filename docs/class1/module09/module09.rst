@@ -229,7 +229,7 @@ GUIで ``Try it out`` から ``configUid`` を指定し動作を確認いただ�
 
 `CLI インスタンスの情報 <#id3>`__ 、 `CLI 特定saved configの詳細  <#saved-config>`__ で確認した情報を元に設定を反映します
 
-API Documentationを確認すると、設定を反映するURLは ``/systems/{systemUid}/instances/{nginxUid}/config`` であることがわかります
+API Documentationを確認すると、設定を反映するURLは ``/systems/{systemUid}/instances/{nginxUid}/config`` であることがわかります。
 また、設定の反映は ``POST`` Method で、JSON形式で設定情報の送付が必要となります。
 
    .. image:: ./media/nim-api-config-apply.png

@@ -169,20 +169,20 @@ Storage Class, Persistent Volume を作成します。こちらの内容は環�
 
 F5 Supportサイト `MyF5 <https://my.f5.com/>`__ にログインし、HELMに利用するパッケージをダウンロードすることでインストールが可能となります。
 
-画面上部 ``RESOURCES`` > ``Downloads`` を開き、各プルダウンに以下の内容を選択しダウンロードします
+画面上部 ``RESOURCES`` > ``Downloads`` を開き、各プルダウンに以下の内容を選択しダウンロードします(2023/11/15時点)
 
 +--------------------+-------------------------+
 |Group               |NGINX                    |
 +--------------------+-------------------------+
 |Product Line        |NGINX Instance Manager   |
 +--------------------+-------------------------+
-|Product Version     |2.6.0                    |
+|Product Version     |2.14.1                   |
 +--------------------+-------------------------+
 |Linux Distribution  |helmchart                |
 +--------------------+-------------------------+
-|Distribution Version|6.0                      |
+|Distribution Version|1.21.3                   |
 +--------------------+-------------------------+
-|Architecture        |k8                       |
+|Architecture        |k8s                      |
 +--------------------+-------------------------+
 
    .. image:: ./media/myf5-nsm-helm-download.png
@@ -193,7 +193,7 @@ HELM Installに利用するDocker Imagesファイルが表示されます。ダ�
 
 .. code-block:: cmdin
 
-  nms-helm-2.6.0.tar.gz
+  nms-helm-2.14.1.tar.gz
 
 ダウンロードしたファイルをKubernetesへのデプロイを行うホストへ転送します
 
@@ -201,7 +201,7 @@ HELM Installに利用するDocker Imagesファイルが表示されます。ダ�
 
   cd ~/
   mkdir nim-install
-  tar -xf nms-helm-2.6.0.tar.gz -C ./nim-install
+  tar -xf nms-helm-2.14.1.tar.gz -C ./nim-install
   # gzip で圧縮されていない模様
 
 展開した各Docker Imageをloadします
@@ -221,18 +221,18 @@ HELM Installに利用するDocker Imagesファイルが表示されます。ダ�
   :linenos:
   :caption: 実行結果サンプル
 
-  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/apigw          latest    585fd202532e   3 weeks ago     148MB
-  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/integrations   latest    5e4f407f4e1f   3 weeks ago     109MB
-  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/ingestion      latest    9c346bac76b4   3 weeks ago     115MB
-  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/dpm            latest    cb116746f789   3 weeks ago     125MB
-  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-6-0/core           latest    e6084032b6ee   3 weeks ago     117MB
+  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-14-1/apigw          latest    585fd202532e   3 weeks ago     148MB
+  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-14-1/integrations   latest    5e4f407f4e1f   3 weeks ago     109MB
+  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-14-1/ingestion      latest    9c346bac76b4   3 weeks ago     115MB
+  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-14-1/dpm            latest    cb116746f789   3 weeks ago     125MB
+  nginxdevopssvcs.azurecr.io/indigo-tools-docker/platform/release-2-14-1/core           latest    e6084032b6ee   3 weeks ago     117MB
 
 Docker Imageのタグを変更します
 
 .. code-block:: cmdin
 
   # 予め nms を registry.example.com に作成する
-  docker images | grep nginxdevops | awk '{ print $1 }' |  awk -F"2-6-0" '{ print "docker tag "$1"2-6-0"$2" registry.example.com/root/nms"$2":2.6.0"  }' |sh
+  docker images | grep nginxdevops | awk '{ print $1 }' |  awk -F"2-14-1" '{ print "docker tag "$1"2-6-0"$2" registry.example.com/root/nms"$2":2.14.1"  }' |sh
 
 コンテナイメージをRegistryにPushします
 
@@ -245,7 +245,7 @@ Docker Imageのタグを変更します
 .. code-block:: cmdin
 
   ## cd ~/nim-install/
-  tar -xf nms-hybrid-2.6.0.tgz
+  tar -xf nms-hybrid-2.14.1.tgz
 
 ラボ環境では予め作成したHELMチャートを利用します。
 
@@ -263,15 +263,15 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   helm upgrade --install \
   --set adminPasswordHash=$(openssl passwd -1 "NIMPassword1234") \
   --set apigw.image.repository=registry.example.com/root/nms/apigw \
-  --set apigw.image.tag=2.6.0 \
+  --set apigw.image.tag=2.14.1 \
   --set core.image.repository=registry.example.com/root/nms/core \
-  --set core.image.tag=2.6.0 \
+  --set core.image.tag=2.14.1 \
   --set dpm.image.repository=registry.example.com/root/nms/dpm \
-  --set dpm.image.tag=2.6.0 \
+  --set dpm.image.tag=2.14.1 \
   --set ingestion.image.repository=registry.example.com/root/nms/ingestion \
-  --set ingestion.image.tag=2.6.0 \
+  --set ingestion.image.tag=2.14.1 \
   --set integrations.image.repository=registry.example.com/root/nms/integrations \
-  --set integrations.image.tag=2.6.0 \
+  --set integrations.image.tag=2.14.1 \
   --set persistence.enable=false \
   nim ./nms-hybrid
   ## Persistent Volume の作成が必要
@@ -287,7 +287,7 @@ HELMを利用しデプロイします。この例ではオプションパラメ�
   :caption: 実行結果サンプル
 
   NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                   APP VERSION
-  nim     default         1               2022-12-13 15:32:57.809164688 +0000 UTC deployed        nms-hybrid-2.6.0        2.6.0
+  nim     default         1               2022-12-13 15:32:57.809164688 +0000 UTC deployed        nms-hybrid-2.14.1        2.14.1
 
 Persistent Volumeの状態を確認します。デプロイする各Podに割り当てられていることが確認できます
 

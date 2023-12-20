@@ -8,7 +8,7 @@ LinuxのNMSデプロイ
 
 ラボ環境で動作を確認される場合、作業ホストは ``ubuntu-host1(10.1.1.5)`` となります
 
-- `Installation Guide (On-Premises) <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/install-guide/>`__
+- `Installation Guide (On-Premises) <https://docs.nginx.com/nginx-management-suite/installation/vm-bare-metal/>`__
 
 1. Click HouseのInstall
 ----
@@ -412,7 +412,7 @@ NGINXが正しく起動していることを確認します
 3. API Connectivity Manager(ACM)のインストール
 ~~~~
 
-こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``API CONNECTIVITY MANAGER`` のタブを参考にしています
+こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/installation/vm-bare-metal/install-acm/>`__ の ``API CONNECTIVITY MANAGER`` のタブを参考にしています
 
 ACMをインストールします
 
@@ -487,7 +487,7 @@ ACMが正しく起動していることを確認します
 4. Security Monitoring(SM)のインストール
 ~~~~
 
-こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/admin-guides/installation/on-prem/install-guide/#install-nms-modules>`__ の ``SECURITY MONITORING`` のタブを参考にしています
+こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/installation/vm-bare-metal/install-security-monitoring/>`__ の ``SECURITY MONITORING`` のタブを参考にしています
 
 SMをインストールします
 
@@ -536,7 +536,7 @@ WAF Compilerをインストールします
 .. code-block:: cmdin
 
   # sudo apt-get update
-  sudo apt-get install -f nms-nap-compiler-v4.2.0
+  sudo apt-get install -f nms-nap-compiler-v4.583.0
 
 NMSを起動します
 

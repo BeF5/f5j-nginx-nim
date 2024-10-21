@@ -113,7 +113,11 @@ Click House Clientを実行し、接続できることを確認します
 1. 事前準備
 ~~~~
 
-インストールに利用する証明書・鍵をコピーします
+インストールに利用する証明書・鍵をコピーします。なお、SSL証明書および鍵ファイルは以下に配置済みです
+
+JumpBox：C:\Users\user\Desktop\Key
+
+ubuntu-host1：/home/ubuntu/
 
 .. code-block:: cmdin
 

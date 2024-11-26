@@ -115,6 +115,8 @@ Click House Clientを実行し、接続できることを確認します
 
 インストールに利用する証明書・鍵をコピーします。なお、SSL証明書および鍵ファイルは以下に配置済みです
 
+なお、NGINX Plus R33以降はNGINXを起動するためにJWTファイルが必要になります。そのため、本LabではR32を使用しております。
+
 JumpBox：C:\\Users\\user\\Desktop\\Key
 
 ubuntu-host1：/home/ubuntu/
@@ -129,7 +131,7 @@ ubuntu-host1：/home/ubuntu/
 .. code-block:: cmdin
 
   wget -qO - https://cs.nginx.com/static/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-  printf "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://pkgs.nginx.com/plus/ubuntu `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-plus.list
+  printf "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://pkgs.nginx.com/plus/R32/ubuntu `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-plus.list
   printf "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://pkgs.nginx.com/nms/ubuntu `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nms.list
   sudo wget -P /etc/apt/apt.conf.d https://cs.nginx.com/static/files/90pkgs-nginx
   

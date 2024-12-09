@@ -575,6 +575,8 @@ NMSを起動します
 
 対象となるホストのIPアドレスを確認し、 踏み台ホストにてChromeを開き、 ``https://<ホストのIPアドレス>/ui`` に接続してください
 
+なお、すでにライセンス適用済みのNIMインスタンスがあり、”NIM UI”からアクセス可能です。Username ``admin`` 、 Password は ``password``でログインしてくだい 
+
 以下の様にTop画面が表示されます
 
    .. image:: ./media/nim-login.png

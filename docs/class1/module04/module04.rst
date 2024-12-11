@@ -11,6 +11,11 @@ Docker ContainerのNMSデプロイ
 
 1. Docker ImageのBuild
 ----
+UDFのWEB SHELLを使用する場合は以下を実行ください。
+
+.. code-block:: cmdin
+
+  su ubuntu
 
 必要なファイルを取得します。
 

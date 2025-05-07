@@ -422,6 +422,8 @@ NGINXが正しく起動していることを確認します
 
 こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/installation/vm-bare-metal/install-acm/>`__ の ``API CONNECTIVITY MANAGER`` のタブを参考にしています
 
+なお、API Connectivity Managerは2024年1月1日にEoSのため参考として掲載しております。
+
 ACMをインストールします
 
 .. code-block:: cmdin

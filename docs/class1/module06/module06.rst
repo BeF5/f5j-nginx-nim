@@ -35,8 +35,9 @@ NMSライセンス適用・クライアント接続
 すでにNGINXをInstallしたホストにNGINX Agentを追加します。
 Kubernetes、Docker Container以外の方法でデプロイした場合、NMSをデプロイしたホストにNMSのコンポーネントと同時にNGINXがデプロイされています。
 
-ラボ環境で動作を確認される場合、作業ホストは ``ubuntu-host1(10.1.1.5)`` となります。
+ラボ環境で動作を確認される場合、作業ホストは ``NIM(10.1.1.10)`` となります。
 NMSデプロイの際に必要となる証明書と鍵は配置済みとなります。
+なお、すでにライセンス適用済みのNIMインスタンスがあり、NIM UI　からアクセス可能です。Username admin 、 Password は password　でログインしてください。
 
 
 ``Instance Manager > Instances`` の画面に表示された内容を参考に、NGINX Agent をInstallします
@@ -48,7 +49,7 @@ NMSデプロイの際に必要となる証明書と鍵は配置済みとなり�
 
   # 証明書と鍵を /etc/ssl/nginx に正しく配置し、以下コマンドを実行してください
   cd ~/
-  curl -k https://10.1.1.5/install/nginx-agent | sudo sh
+  curl -k https://10.1.1.10/install/nginx-agent | sudo sh
 
 
 NGINX Agentを起動します
@@ -117,7 +118,7 @@ Base OS Image ``Ubuntu20.04`` , ``NGINX Plus, NAP WAF + NGINX Agent`` Docker Ima
 
 .. code-block:: cmdin
 
-  ./buildNGINXcontainer.sh -o ubuntu20 -i agent-plus-napw -t agent-plus-napw -C nginx-repo.crt -K nginx-repo.key -n "https://10.1.1.5"
+  ./buildNGINXcontainer.sh -o ubuntu20 -i agent-plus-napw -t agent-plus-napw -C nginx-repo.crt -K nginx-repo.key -n "https://10.1.1.10"
 
 2. Docker Compose 実行
 ~~~~
@@ -136,7 +137,7 @@ Docker Compose fileの内容は以下のような構成となります
           ports:
           - "8081:80"
           environment:
-           - NMS_HOST=10.1.1.5
+           - NMS_HOST=10.1.1.10
            - NMS_GRPC_PORT=443
            - NMS_INSTANCEGROUP=napw-cluster
            - NMS_TAG=napw-proxy
@@ -146,7 +147,7 @@ Docker Compose fileの内容は以下のような構成となります
 - ``5-6行目`` : HTTP(8081)で待ち受けた内容を、ContainerのHTTP(80)へマッピング
 - ``8-11行目`` : NGINX Agent ありのDocker Imageの場合以下パラメータを指定して実行
 
-  - ``NMS_HOST`` : NMSが待ち受けるIPアドレス(10.1.1.5)
+  - ``NMS_HOST`` : NMSが待ち受けるIPアドレス(10.1.1.10)
   - ``NMS_GRPC_PORT`` : NMSが待ち受けるPort番号(443)
   - ``NMS_INSTANCEGROUP (option)`` : インスタンス接続時にインスタンスグループに登録する場合のグループ名(napw-cluster)
   - ``NMS_TAG (option)`` : インスタンス接続時にタグを付与して登録する場合のタグ(napw-proxy)

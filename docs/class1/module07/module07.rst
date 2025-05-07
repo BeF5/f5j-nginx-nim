@@ -8,6 +8,7 @@ Scan機能は、NIMから対象のネットワークに対し、NGINXやその�
 ``この機能はInsntance Managerのライセンスをインストールしていないホスト`` でも実行することが可能です。
 
 Dockerが動作するホストで以下コマンドを参考に古いVersionのNGINX OSS Container Imageを実行します
+作業ホストは ``ubuntu-host1(10.1.1.5)`` となります
 
 .. code-block:: cmdin
 

@@ -45,7 +45,7 @@ Click HouseのInstallします
    ** 省略 **
    chown -R clickhouse-bridge:clickhouse-bridge '/usr/bin/clickhouse-odbc-bridge'
    chown -R clickhouse-bridge:clickhouse-bridge '/usr/bin/clickhouse-library-bridge'
-  Enter password for default user: password << 左の文字列を入力
+  Set up the password for the default user: password << 左の文字列を入力
   Password for default user is saved in file /etc/clickhouse-server/users.d/default-password.xml.
   Setting capabilities for clickhouse binary. This is optional.
    chown -R clickhouse:clickhouse '/etc/clickhouse-server'

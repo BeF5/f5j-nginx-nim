@@ -156,107 +156,107 @@ Install時に出力される結果を確認します
   :emphasize-lines: 2-3, 6,8, 56,58
 
   ** 省略 **
-FQDN [nim.local]:    <-Enterを押してください。
-You have chosen: nim.local
+  FQDN [nim.local]:    <-Enterを押してください。
+  You have chosen: nim.local
 
-Further certificate generation steps will use this FQDN.
- * Creating certificates for NGINX Modules...
- *** Generating certificates for NGINX Services: agent-ingest, type - auth_server...
- *** Generating certificates for NGINX Services: dataplane-manager, type - auth_server...
- *** Generating certificates for NGINX Services: core, type - auth_server...
- *** Generating certificates for NGINX Services: integrations, type - auth_server...
- *** Generating certificates for NGINX Services: secmon, type - auth_server...
- *** Generating certificates for NGINX Services: agent-ingest, type - auth_client...
- *** Generating certificates for NGINX Services: dataplane-manager, type - auth_client...
- *** Generating certificates for NGINX Services: core, type - auth_client...
- *** Generating certificates for NGINX Services: devportal, type - auth_client...
- *** Generating certificates for NGINX Services: integrations, type - auth_client...
- *** Generating certificates for NGINX Services: secmon, type - auth_client...
- * Creating certificates for internal database components...
-Reloading systemd manager configuration
-Unmasking the service unit, 'systemctl unmask nms'
-Setting the preset flag for service unit, 'systemctl preset nms'
-Created symlink /etc/systemd/system/multi-user.target.wants/nms.service → /lib/systemd/system/nms.service.
-Unmasking the service unit, 'systemctl unmask nms-core'
-Setting the preset flag for service unit, 'systemctl preset nms-core'
-Created symlink /etc/systemd/system/nms.service.wants/nms-core.service → /lib/systemd/system/nms-core.service.
-Unmasking the service unit, 'systemctl unmask nms-dpm'
-Setting the preset flag for service unit, 'systemctl preset nms-dpm'
-Created symlink /etc/systemd/system/nms.service.wants/nms-dpm.service → /lib/systemd/system/nms-dpm.service.
-Unmasking the service unit, 'systemctl unmask nms-ingestion'
-Setting the preset flag for service unit, 'systemctl preset nms-ingestion'
-Created symlink /etc/systemd/system/nms.service.wants/nms-ingestion.service → /lib/systemd/system/nms-ingestion.service.
-Unmasking the service unit, 'systemctl unmask nms-integrations'
-Setting the preset flag for service unit, 'systemctl preset nms-integrations'
-Created symlink /etc/systemd/system/nms.service.wants/nms-integrations.service → /lib/systemd/system/nms-integrations.service.
-Unmasking the service unit, 'systemctl unmask nms-sm'
-Setting the preset flag for service unit, 'systemctl preset nms-sm'
-Created symlink /etc/systemd/system/multi-user.target.wants/nms-sm.service → /lib/systemd/system/nms-sm.service.
-Created symlink /etc/systemd/system/nms.service.wants/nms-sm.service → /lib/systemd/system/nms-sm.service.
-Adding user nginx to group nms
-Adding user www-data to group nms
-Adding user syslog to group nms
-Ensuring the log file exists, 'touch /var/log/nms/nms.log'
-Generating default password for 'admin' user account
-Using openssl version 1.1.1f
-Writing admin password to /etc/nms/nginx/.htpasswd
-Checking if clickhouse-server is installed, 'which clickhouse-server'. 
-/usr/bin/clickhouse-server
-Restarting rsyslog process 
-----------------------------------------------------------------------
-NGINX Management Suite package has been successfully installed.
+  Further certificate generation steps will use this FQDN.
+   * Creating certificates for NGINX Modules...
+   *** Generating certificates for NGINX Services: agent-ingest, type - auth_server...
+   *** Generating certificates for NGINX Services: dataplane-manager, type - auth_server...
+   *** Generating certificates for NGINX Services: core, type - auth_server...
+   *** Generating certificates for NGINX Services: integrations, type - auth_server...
+   *** Generating certificates for NGINX Services: secmon, type - auth_server...
+   *** Generating certificates for NGINX Services: agent-ingest, type - auth_client...
+   *** Generating certificates for NGINX Services: dataplane-manager, type - auth_client...
+   *** Generating certificates for NGINX Services: core, type - auth_client...
+   *** Generating certificates for NGINX Services: devportal, type - auth_client...
+   *** Generating certificates for NGINX Services: integrations, type - auth_client...
+   *** Generating certificates for NGINX Services: secmon, type - auth_client...
+   * Creating certificates for internal database components...
+  Reloading systemd manager configuration
+  Unmasking the service unit, 'systemctl unmask nms'
+  Setting the preset flag for service unit, 'systemctl preset nms'
+  Created symlink /etc/systemd/system/multi-user.target.wants/nms.service → /lib/systemd/system/nms.service.
+  Unmasking the service unit, 'systemctl unmask nms-core'
+  Setting the preset flag for service unit, 'systemctl preset nms-core'
+  Created symlink /etc/systemd/system/nms.service.wants/nms-core.service → /lib/systemd/system/nms-core.service.
+  Unmasking the service unit, 'systemctl unmask nms-dpm'
+  Setting the preset flag for service unit, 'systemctl preset nms-dpm'
+  Created symlink /etc/systemd/system/nms.service.wants/nms-dpm.service → /lib/systemd/system/nms-dpm.service.
+  Unmasking the service unit, 'systemctl unmask nms-ingestion'
+  Setting the preset flag for service unit, 'systemctl preset nms-ingestion'
+  Created symlink /etc/systemd/system/nms.service.wants/nms-ingestion.service → /lib/systemd/system/nms-ingestion.service.
+  Unmasking the service unit, 'systemctl unmask nms-integrations'
+  Setting the preset flag for service unit, 'systemctl preset nms-integrations'
+  Created symlink /etc/systemd/system/nms.service.wants/nms-integrations.service → /lib/systemd/system/nms-integrations.service.
+  Unmasking the service unit, 'systemctl unmask nms-sm'
+  Setting the preset flag for service unit, 'systemctl preset nms-sm'
+  Created symlink /etc/systemd/system/multi-user.target.wants/nms-sm.service → /lib/systemd/system/nms-sm.service.
+  Created symlink /etc/systemd/system/nms.service.wants/nms-sm.service → /lib/systemd/system/nms-sm.service.
+  Adding user nginx to group nms
+  Adding user www-data to group nms
+  Adding user syslog to group nms
+  Ensuring the log file exists, 'touch /var/log/nms/nms.log'
+  Generating default password for 'admin' user account
+  Using openssl version 1.1.1f
+  Writing admin password to /etc/nms/nginx/.htpasswd
+  Checking if clickhouse-server is installed, 'which clickhouse-server'. 
+  /usr/bin/clickhouse-server
+  Restarting rsyslog process 
+  ----------------------------------------------------------------------
+  NGINX Management Suite package has been successfully installed.
 
-Please follow the next steps to Start the software:
+  Please follow the next steps to Start the software:
 
-    # Start the Clickhouse database server
-    sudo systemctl start clickhouse-server
+      # Start the Clickhouse database server
+      sudo systemctl start clickhouse-server
 
-    # Start NGINX web server
-    sudo systemctl start nginx
+      # Start NGINX web server
+      sudo systemctl start nginx
 
-    # If NGINX is already running, reload it
-    sudo service nginx reload
+      # If NGINX is already running, reload it
+      sudo service nginx reload
 
-    # Optional: load the included SELinux policy
-    sudo semodule -n -i /usr/share/selinux/packages/nms.pp
-    sudo /usr/sbin/load_policy
-    sudo restorecon -F -R /usr/bin/nms-core
-    sudo restorecon -F -R /usr/bin/nms-dpm
-    sudo restorecon -F -R /usr/bin/nms-ingestion
-    sudo restorecon -F -R /usr/bin/nms-integrations
-    sudo restorecon -F -R /usr/bin/nms-sm
-    sudo restorecon -F -R /usr/lib/systemd/system/nms.service
-    sudo restorecon -F -R /usr/lib/systemd/system/nms-core.service
-    sudo restorecon -F -R /usr/lib/systemd/system/nms-dpm.service
-    sudo restorecon -F -R /usr/lib/systemd/system/nms-ingestion.service
-    sudo restorecon -F -R /usr/lib/systemd/system/nms-integrations.service
-    sudo restorecon -F -R /var/lib/nms/modules/manager.json
-    sudo restorecon -F -R /var/lib/nms/modules.json
-    sudo restorecon -F -R /var/lib/nms/secrets
-    sudo restorecon -F -R /var/lib/nms/streaming
-    sudo restorecon -F -R /var/lib/nms
-    sudo restorecon -F -R /var/lib/nms/dqlite
-    sudo restorecon -F -R /var/run/nms
-    sudo restorecon -F -R /var/lib/nms/modules
-    sudo restorecon -F -R /var/log/nms
+      # Optional: load the included SELinux policy
+      sudo semodule -n -i /usr/share/selinux/packages/nms.pp
+      sudo /usr/sbin/load_policy
+      sudo restorecon -F -R /usr/bin/nms-core
+      sudo restorecon -F -R /usr/bin/nms-dpm
+      sudo restorecon -F -R /usr/bin/nms-ingestion
+      sudo restorecon -F -R /usr/bin/nms-integrations
+      sudo restorecon -F -R /usr/bin/nms-sm
+      sudo restorecon -F -R /usr/lib/systemd/system/nms.service
+      sudo restorecon -F -R /usr/lib/systemd/system/nms-core.service
+      sudo restorecon -F -R /usr/lib/systemd/system/nms-dpm.service
+      sudo restorecon -F -R /usr/lib/systemd/system/nms-ingestion.service
+      sudo restorecon -F -R /usr/lib/systemd/system/nms-integrations.service
+      sudo restorecon -F -R /var/lib/nms/modules/manager.json
+      sudo restorecon -F -R /var/lib/nms/modules.json
+      sudo restorecon -F -R /var/lib/nms/secrets
+      sudo restorecon -F -R /var/lib/nms/streaming
+      sudo restorecon -F -R /var/lib/nms
+      sudo restorecon -F -R /var/lib/nms/dqlite
+      sudo restorecon -F -R /var/run/nms
+      sudo restorecon -F -R /var/lib/nms/modules
+      sudo restorecon -F -R /var/log/nms
 
-    # Enable NGINX Management Suite services
-    sudo systemctl enable nms nms-core nms-dpm nms-ingestion nms-integrations nms-sm --now
+      # Enable NGINX Management Suite services
+      sudo systemctl enable nms nms-core nms-dpm nms-ingestion nms-integrations nms-sm --now
 
-    Admin username: admin
+      Admin username: admin
 
-    Admin password: B8oTVUIK73cRQB11hZv6HZQGY5NUEh
+      Admin password: B8oTVUIK73cRQB11hZv6HZQGY5NUEh
 
-Please change this password with your own as soon as possible:
-https://docs.nginx.com/nginx-instance-manager/admin-guide/authentication/basic-auth/set-up-basic-authentication/
+  Please change this password with your own as soon as possible:
+  https://docs.nginx.com/nginx-instance-manager/admin-guide/authentication/basic-auth/set-up-basic-authentication/
 
-For UI access, point your browser to the HTTPS port of this machine. 
+  For UI access, point your browser to the HTTPS port of this machine. 
 
-IMPORTANT: By default, NGINX Instance Manager may collect and send anonymized telemetry and interaction information for analysis by F5 NGINX. This information is used to make improvements to our products and services. Administrators may disable this functionality for all users in the web portal.
-----------------------------------------------------------------------
-Processing triggers for systemd (245.4-4ubuntu3.6) ...
-Processing triggers for man-db (2.9.1-1) ...
-Processing triggers for rsyslog (8.2001.0-1ubuntu1.1) ...
+  IMPORTANT: By default, NGINX Instance Manager may collect and send anonymized telemetry and interaction information for analysis by F5 NGINX.   This information is used to make improvements to our products and services. Administrators may disable this functionality for all users in the web portal.
+  ----------------------------------------------------------------------
+  Processing triggers for systemd (245.4-4ubuntu3.6) ...
+  Processing triggers for man-db (2.9.1-1) ...
+  Processing triggers for rsyslog (8.2001.0-1ubuntu1.1) ...
 
 - 56,58行目の内容となりますので情報を確認してください
 

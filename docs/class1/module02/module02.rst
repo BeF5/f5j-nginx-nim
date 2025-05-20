@@ -153,7 +153,7 @@ Install時に出力される結果を確認します
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 2-3, 6,8, 56,58
+  :emphasize-lines: 2, 89, 91
 
   ** 省略 **
   FQDN [nim.local]:    <-Enterを押してください。

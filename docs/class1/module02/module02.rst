@@ -407,12 +407,13 @@ NMSが起動していることを確認します
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-
-  ubuntu     18756  0.0  0.0   8160   724 pts/0    S+   10:49   0:00  |           \_ grep --color=auto nms
-  nms        18667  1.3  0.9 1261428 37752 ?       Ssl  10:49   0:00 /usr/bin/nms-ingestion
-  nms        18687  1.5  0.6 1357064 27024 ?       Ssl  10:49   0:00 /usr/bin/nms-integrations
-  nms        18709  4.1  1.3 1374596 52064 ?       Ssl  10:49   0:00 /usr/bin/nms-dpm
-  nms        18710  3.9  1.0 1364580 42960 ?       Ssl  10:49   0:00 /usr/bin/nms-core
+  
+  root       12619  0.0  0.0   8160   672 pts/1    S+   16:50   0:00              \_ grep --color=auto nms
+  nms        12469  0.1  0.4 1267192 36336 ?       Ssl  16:47   0:00 /usr/bin/nms-ingestion
+  nms        12494  0.0  0.5 1257480 42436 ?       Ssl  16:47   0:00 /usr/bin/nms-sm start
+  nms        12511  0.2  0.5 1304640 45328 ?       Ssl  16:47   0:00 /usr/bin/nms-integrations
+  nms        12537  0.4  0.6 1302140 52588 ?       Ssl  16:47   0:00 /usr/bin/nms-core
+  nms        12545  0.7  0.9 1318664 75736 ?       Ssl  16:47   0:01 /usr/bin/nms-dpm
 
 NGINX Web Serverを再起動します
 

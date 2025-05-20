@@ -258,7 +258,7 @@ Install時に出力される結果を確認します
   Processing triggers for man-db (2.9.1-1) ...
   Processing triggers for rsyslog (8.2001.0-1ubuntu1.1) ...
 
-- 56,58行目の内容となりますので情報を確認してください
+- NIMのAdmin情報は89,91行目の内容となりますので確認してください
 
 
 設定ファイルの内容の確認します

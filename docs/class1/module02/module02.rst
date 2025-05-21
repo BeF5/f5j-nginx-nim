@@ -425,7 +425,7 @@ NGINXが正しく起動していることを確認します
 
 .. code-block:: cmdin
 
-  service nginx status
+  sudo systemctl status nginx
 
 .. code-block:: bash
   :linenos:

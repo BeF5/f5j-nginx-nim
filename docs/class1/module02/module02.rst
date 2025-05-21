@@ -527,48 +527,7 @@ ACMが正しく起動していることを確認します
   nms        12595  1.1  0.7 1268892 63196 ?       Ssl  02:53   0:01 /usr/bin/nms-acm server
 
 
-4. Security Monitoring(SM)のインストール
-~~~~
-
-こちらの手順は `Install NGINX Management Suite Modules <https://docs.nginx.com/nginx-management-suite/installation/vm-bare-metal/install-security-monitoring/>`__ の ``SECURITY MONITORING`` のタブを参考にしています
-
-SMをインストールします
-
-.. code-block:: cmdin
-
-  # sudo apt-get update
-  sudo apt-get install -y nms-sm
-
-NMSを起動します
-
-.. code-block:: cmdin
-
-  sudo systemctl restart nms
-  sudo systemctl restart nms-core
-  sudo systemctl restart nms-dpm
-  sudo systemctl restart nms-ingestion
-  sudo systemctl restart nms-integrations
-  sudo systemctl restart nginx
-
-プロセスの動作状況の結果を参考に示します。 ``SMの名称のプロセスは動作しません。``
-
-.. code-block:: cmdin
-
-  ps aufx | grep nms
-
-.. code-block:: bash
-  :linenos:
-  :caption: 実行結果サンプル
-
-  ubuntu     12607  0.0  0.0   8160   672 pts/0    S+   02:55   0:00              \_ grep --color=auto nms
-  nms        12385  0.2  0.7 1376852 62380 ?       Ssl  02:43   0:01 /usr/bin/nms-core
-  nms        12435  0.3  0.7 1379940 63544 ?       Ssl  02:43   0:02 /usr/bin/nms-dpm
-  nms        12479  0.1  0.3 1265868 31216 ?       Ssl  02:43   0:01 /usr/bin/nms-ingestion
-  nms        12515  0.0  0.5 1334052 42072 ?       Ssl  02:43   0:00 /usr/bin/nms-integrations
-  nms        12595  1.1  0.7 1268892 63196 ?       Ssl  02:53   0:01 /usr/bin/nms-acm server
-
-
-5. WAF Compilerのインストール
+4. WAF Compilerのインストール
 ~~~~
 
 こちらの手順は `Set Up App Protect WAF Configuration Management <https://docs.nginx.com/nginx-management-suite/nim/how-to/app-protect/setup-waf-config-management/>`__ を参考にしています

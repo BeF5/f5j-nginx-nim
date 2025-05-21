@@ -538,7 +538,7 @@ WAF Compilerをインストールします
 .. code-block:: cmdin
 
   # sudo apt-get update
-  sudo apt-get install -f nms-nap-compiler-v5.144.0
+  sudo apt-get install -y nms-nap-compiler-v5.144.0
 
 NMSを起動します
 

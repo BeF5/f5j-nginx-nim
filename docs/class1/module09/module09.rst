@@ -84,6 +84,11 @@ API接続を行った結果が表示されます。curlコマンドは実際に�
 
 `GUI インスタンスの情報 <#id1>`__ で実施した内容をCLIで実行します
 
+もし、jqのインストールが必要な場合は以下のコマンドでインストールをしてください。
+.. code-block:: cmdin
+
+  sudo apt -y install jq
+
 curl コマンドを実行します
 
 .. code-block:: cmdin
